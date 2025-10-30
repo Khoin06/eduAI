@@ -1,0 +1,46 @@
+<!-- src/app/auth/login/login.component.html -->
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="text-center mb-4">Đăng nhập EduAI</h2>
+
+    <form (ngSubmit)="login()">
+      <div class="mb-3">
+        <input
+          [(ngModel)]="credentials.username"
+          name="username"
+          class="form-control"
+          placeholder="Tên đăng nhập"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <input
+          [(ngModel)]="credentials.password"
+          name="password"
+          type="password"
+          class="form-control"
+          placeholder="Mật khẩu"
+          required
+        />
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+      </button>
+    </form>
+
+    <p class="text-center mt-3">
+      Chưa có tài khoản?
+      <a routerLink="/register">Đăng ký</a>
+    </p>
+  </div>
+</div>

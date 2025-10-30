@@ -1,0 +1,32 @@
+/* src/app/auth/register/register.component.css */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+  padding: 1rem;
+}
+
+.register-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+.form-control {
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #ced4da;
+}
+
+.btn-success {
+  border-radius: 12px;
+  padding: 0.75rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  border: none;
+}

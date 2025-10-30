@@ -1,0 +1,70 @@
+<!-- src/app/auth/register/register.component.html -->
+<div class="register-container">
+  <div class="register-card">
+    <h2 class="text-center mb-4">Đăng ký EduAI</h2>
+
+    <form (ngSubmit)="register()">
+      <div class="mb-3">
+        <label class="form-label">Tên đăng nhập *</label>
+        <input
+          [(ngModel)]="user.username"
+          name="username"
+          class="form-control"
+          placeholder="Nhập tên đăng nhập"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Mật khẩu *</label>
+        <input
+          [(ngModel)]="user.password"
+          name="password"
+          type="password"
+          class="form-control"
+          placeholder="Nhập mật khẩu"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email *</label>
+        <input
+          [(ngModel)]="user.email"
+          name="email"
+          type="email"
+          class="form-control"
+          placeholder="nhap@email.com"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Họ tên</label>
+        <input
+          [(ngModel)]="user.fullName"
+          name="fullName"
+          class="form-control"
+          placeholder="Nguyễn Văn A"
+        />
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-success w-100"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? 'Đang đăng ký...' : 'Đăng ký' }}
+      </button>
+    </form>
+
+    <p class="text-center mt-3">
+      Đã có tài khoản?
+      <a routerLink="/login" class="text-primary">Đăng nhập</a>
+    </p>
+  </div>
+</div>

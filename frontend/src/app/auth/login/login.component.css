@@ -1,0 +1,29 @@
+/* src/app/auth/login/login.component.css */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 1rem;
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.btn-primary {
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-weight: 600;
+}

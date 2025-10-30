@@ -1,0 +1,13 @@
+<!-- src/app/chat-box/chat-box.component.html -->
+<div class="chat-container">
+  <div class="messages">
+    <div *ngFor="let msg of messages" class="message">
+      <p><strong>Bạn:</strong> {{ msg.q }}</p>
+      <p><strong>AI:</strong> {{ msg.a }}</p>
+    </div>
+  </div>
+  <div class="input-group">
+    <input [(ngModel)]="question" (keyup.enter)="send()" placeholder="Hỏi AI..." class="form-control">
+    <button (click)="send()" class="btn btn-primary">Gửi</button>
+  </div>
+</div>
