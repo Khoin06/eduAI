@@ -1,0 +1,13 @@
+<!-- src/app/pages/certificates/certificates.component.html -->
+<div class="p-4">
+  <h2 class="h4 fw-bold mb-4">Chứng chỉ của bạn</h2>
+  <div class="row g-4">
+    <div class="col-md-6" *ngFor="let cert of certificates">
+      <div class="border p-4 rounded-3 shadow-sm bg-white">
+        <h5 class="fw-bold text-primary">{{ cert.name }}</h5>
+        <p class="text-muted mb-1">Khóa học: {{ cert.course }}</p>
+        <p class="text-muted mb-0">Cấp ngày: {{ cert.date }}</p>
+      </div>
+    </div>
+  </div>
+</div>

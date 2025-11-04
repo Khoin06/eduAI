@@ -1,0 +1,94 @@
+<!-- src/app/pages/dashboard/dashboard.component.html -->
+<div class="dashboard-content p-4 p-md-5">
+  <!-- HEADER GIỮ NGUYÊN -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+      <h1 class="h3 fw-bold text-dark mb-1">Chào mừng trở lại, 
+        <span class="text-primary">{{ currentUser?.username || 'Bạn' }}</span>!</h1>
+      <p class="text-muted mb-0">Dưới đây là tiến độ học tập của bạn</p>
+    </div>
+    <div *ngIf="currentUser">
+      <button class="btn btn-outline-danger d-flex align-items-center gap-2"  (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+      </button>
+    </div>
+  </div>
+
+  <!-- THỐNG KÊ GIỮ NGUYÊN -->
+  <div class="row g-4 mb-5">
+    <!-- 4 thẻ stat giữ nguyên -->
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-primary text-white p-4 rounded-4 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="h5 fw-bold mb-0">{{ courses.length }}</h3>
+            <small>Khóa học</small>
+          </div>
+          <i class="fas fa-book fa-2x opacity-75"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-success text-white p-4 rounded-4 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="h5 fw-bold mb-0">8</h3>
+            <small>Hoàn thành</small>
+          </div>
+          <i class="fas fa-check-circle fa-2x opacity-75"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-warning text-dark p-4 rounded-4 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="h5 fw-bold mb-0">68%</h3>
+            <small>Tiến độ</small>
+          </div>
+          <i class="fas fa-chart-line fa-2x opacity-75"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bg-info text-white p-4 rounded-4 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h3 class="h5 fw-bold mb-0">5</h3>
+            <small>Chứng chỉ</small>
+          </div>
+          <i class="fas fa-certificate fa-2x opacity-75"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KHÓA HỌC TỪ DB -->
+  <h2 class="h4 fw-bold text-dark mb-3">Khóa học đang học</h2>
+
+  <!-- NẾU CÓ KHÓA HỌC → HIỆN -->
+  <div class="row g-4" *ngIf="courses.length > 0">
+    <div class="col-md-6 col-lg-4" *ngFor="let course of courses">
+      <div class="course-card bg-white rounded-4 shadow-sm overflow-hidden border">
+        <img [src]="course.imageUrl" class="w-100" style="height: 160px; object-fit: cover;" alt="{{ course.title }}">
+        <div class="p-3">
+          <h5 class="fw-semibold mb-1">{{ course.title }}</h5>
+          <p class="text-muted small mb-2">Giảng viên: {{ course.title || 'Chưa có' }}</p>
+          <div class="progress mb-2" style="height: 6px;">
+            <div class="progress-bar bg-success" [style.width.%]="course.progress || 0"></div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-success fw-semibold">{{ course.progress || 0 }}% hoàn thành</small>
+            <!-- <a [routerLink]="['/course', course.id]" class="btn btn-sm btn-outline-primary">Tiếp tục</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NẾU KHÔNG CÓ KHÓA HỌC → HIỆN THÔNG BÁO -->
+  <div class="text-center py-5" *ngIf="courses.length === 0">
+    <p class="text-muted">Bạn chưa đăng ký khóa học nào.</p>
+    <a routerLink="/courses" class="btn btn-primary">Xem tất cả khóa học</a>
+  </div>
+</div>

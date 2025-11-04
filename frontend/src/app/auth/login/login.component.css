@@ -1,29 +1,223 @@
-/* src/app/auth/login/login.component.css */
+:host {
+  display: block;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* CỐ ĐỊNH NỘI DUNG */
+.min-vh-100 {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Chỉ cho phép scroll trong form nếu quá cao (hiếm) */
+.col-lg-6.overflow-auto {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.img-fluid {
+  max-width: 90% !important;   /* TỪ 80% → 90% */
+  height: auto !important;
+}
+/* Container chính */
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
   padding: 1rem;
 }
 
-.login-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+/* Căn giữa form và illustration */
+.login-row {
+  gap: 3rem;
+  align-items: center;
+}
+
+/* Illustration bên trái */
+.illustration-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.illustration-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  height: 380px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.illustration-circle circle {
+  stroke: #a435f0;
+  stroke-width: 1.5;
+  stroke-dasharray: 10, 10;
+  fill: none;
+}
+
+.illustration-img {
+  position: relative;
+  z-index: 1;
+  max-width: 320px;
   width: 100%;
+}
+
+/* Form bên phải */
+.login-form-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.form-control {
-  border-radius: 8px;
-  padding: 0.75rem;
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1c1d1f;
+  margin-bottom: 0.5rem;
 }
 
-.btn-primary {
-  border-radius: 8px;
-  padding: 0.75rem;
+.login-subtitle {
+  color: #6a6f73;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Input Email */
+.email-input {
+  height: 56px !important;
+  border: 1.5px solid #d1d7e0 !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  padding: 0 1rem !important;
+  transition: border-color 0.2s ease;
+}
+
+.email-input:focus {
+  border-color: #a435f0 !important;
+  box-shadow: 0 0 0 3px rgba(164, 53, 240, 0.1) !important;
+}
+
+/* Nút Tiếp tục */
+.continue-btn {
+  height: 56px !important;
+  border-radius: 8px !important;
+  background: #a435f0 !important;
+  border: none !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+  transition: background 0.2s ease;
+}
+
+.continue-btn:hover:not(:disabled) {
+  background: #8e1de0 !important;
+}
+
+.continue-btn:disabled {
+  background: #c6a8f5 !important;
+  cursor: not-allowed;
+}
+
+/* Divider "hoặc" */
+.divider-or {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #6a6f73;
+  font-size: 0.875rem;
+}
+
+.divider-or::before,
+.divider-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #d1d7e0;
+  margin: 0 1rem;
+}
+
+/* Nút Social */
+.social-btn {
+  height: 48px !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #d1d7e0 !important;
+  background: white !important;
+  color: #1c1d1f !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+  border-color: #a435f0 !important;
+  background: #f8f5ff !important;
+}
+
+.social-btn i {
+  font-size: 1.1rem;
+}
+
+/* Register Link */
+.register-link {
+  color: #6a6f73;
+  font-size: 0.875rem;
+}
+
+.register-link a {
+  color: #a435f0;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .login-row {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .illustration-wrapper {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  .illustration-circle {
+    width: 300px;
+    height: 300px;
+  }
+
+  .illustration-img {
+    max-width: 260px;
+  }
+
+  .login-form-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-form-card {
+    padding: 1.5rem;
+  }
+
+  .social-btn {
+    font-size: 0.8rem;
+  }
 }

@@ -1,0 +1,70 @@
+/* src/app/app.component.css */
+html, body, app-root {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+/* src/app/auth/login/login.component.css */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8f9fc;
+}
+.d-flex {
+  min-height: 100vh;
+}
+/* src/app/app.component.css */
+main {
+  min-height: calc(100vh - 76px); /* trừ chiều cao header */
+  transition: padding-left 0.3s ease;
+}
+
+/* Khi KHÔNG có sidebar → form ở giữa */
+.ps-0 {
+  padding-left: 0 !important;
+}
+
+/* Khi CÓ sidebar → đẩy nội dung sang phải */
+.ps-5 {
+  padding-left: 280px; /* rộng sidebar */
+}
+/* Sidebar cố định bên trái */
+app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Main content đẩy sang phải */
+.flex-grow-1 {
+  margin-left: 260px;
+  background: #f8f9fc;
+  min-height: 100vh;
+}
+.full-screen-login {
+  min-height: 100vh;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Responsive: Ẩn sidebar trên mobile */
+@media (max-width: 992px) {
+  app-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .flex-grow-1 {
+    margin-left: 0 !important;
+  }
+}
+
+/* Khi sidebar mở trên mobile (nếu có toggle) */
+.sidebar-open app-sidebar {
+  transform: translateX(0);
+}

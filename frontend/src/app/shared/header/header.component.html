@@ -1,0 +1,48 @@
+<!-- src/app/shared/header/header.component.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/">
+      <i class="fas fa-graduation-cap"></i> EduAI
+    </a>
+
+    <!-- Toggle cho mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Collapse -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+
+        <!-- HIỆN KHI CHƯA ĐĂNG NHẬP -->
+        <ng-container *ngIf="!(authService.isLoggedIn$ | async)">
+          <li class="nav-item">
+            <a routerLink="/login" class="btn btn-outline-light me-2">Đăng nhập</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/register" class="btn btn-light text-primary">Đăng ký</a>
+          </li>
+        </ng-container>
+
+        <!-- HIỆN KHI ĐÃ ĐĂNG NHẬP -->
+        <ng-container *ngIf="authService.isLoggedIn$ | async">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white" href="#" role="button" data-bs-toggle="dropdown">
+              <img [src]="currentUser?.avatar || '/assets/images/avatar-default.png'" 
+                   alt="Avatar" class="rounded-circle" width="32" height="32">
+              <span>{{ currentUser?.fullName || 'User' }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" routerLink="/profile"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
+              <li><a class="dropdown-item" routerLink="/settings"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+            </ul>
+          </li>
+        </ng-container>
+
+      </ul>
+    </div>
+  </div>
+</nav>

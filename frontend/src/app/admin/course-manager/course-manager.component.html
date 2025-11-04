@@ -1,0 +1,55 @@
+<!-- src/app/pages/course-management/course-management.component.html -->
+<div class="p-4">
+  <h2 class="h4 fw-bold mb-4">Quản lý Khóa học</h2>
+
+  <!-- NÚT THÊM -->
+  <button (click)="openAddModal()" class="btn btn-primary mb-3">
+    + Thêm khóa học
+  </button>
+
+  <!-- BẢNG KHÓA HỌC -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Tên khóa</th>
+          <th>Giảng viên</th>
+          <th>Giá</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses; let i = index">
+          <td>{{ course.name }}</td>
+          <td>{{ course.instructor }}</td>
+          <td>{{ course.price }}</td>
+          <td>
+            <button (click)="editCourse(i)" class="btn btn-sm btn-warning me-1">Sửa</button>
+            <button (click)="deleteCourse(i)" class="btn btn-sm btn-danger">Xóa</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL THÊM/SỬA -->
+  <div class="modal fade show d-block" *ngIf="showModal" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEdit ? 'Sửa' : 'Thêm' }} khóa học</h5>
+          <button (click)="closeModal()" class="btn-close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- <input [(ngModel)]="tempCourse.name" placeholder="Tên khóa học" class="form-control mb-2">
+          <input [(ngModel)]="tempCourse.instructor" placeholder="Giảng viên" class="form-control mb-2">
+          <input [(ngModel)]="tempCourse.price" type="number" placeholder="Giá (VND)" class="form-control"> -->
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeModal()" class="btn btn-secondary">Hủy</button>
+          <button (click)="saveCourse()" class="btn btn-success">Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {
-  private api = `${'http://localhost:8080/api'}/courses`;
+  private api = 'http://localhost:8080/api/courses';
 
   constructor(private http: HttpClient) {}
 

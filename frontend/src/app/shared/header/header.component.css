@@ -1,0 +1,22 @@
+/* src/app/shared/header/header.component.css */
+.navbar-brand img {
+  filter: brightness(0) invert(1);
+}
+
+.nav-link {
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #fff !important;
+}
+
+.dropdown-menu {
+  min-width: 200px;
+}
+
+.dropdown-item {
+  font-size: 0.9rem;
+}

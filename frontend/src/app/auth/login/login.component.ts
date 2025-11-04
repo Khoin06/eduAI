@@ -4,40 +4,38 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { AppComponent } from '../../app.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  credentials = { username: '', password: '' };
-  error = '';
+  username = '';
+  password = '';
   isLoading = false;
+  constructor(private http: HttpClient,private app: AppComponent,private authService: AuthService,private router: Router) {}
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
-
-  login() {
-    if (!this.credentials.username || !this.credentials.password) {
-      this.error = 'Vui lòng nhập đầy đủ thông tin';
-      return;
-    }
-
-    this.isLoading = true;
-    this.error = '';
-
-    this.authService.login(this.credentials).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: (err) => {
-        this.error = err.error?.message || 'Đăng nhập thất bại.';
-        this.isLoading = false;
-      },
-      complete: () => this.isLoading = false
-    });
+login() {
+  this.http.post<any>('http://localhost:8080/api/auth/login', {
+    username: this.username,
+    password: this.password
+  }).subscribe({
+next: (res) => {
+  console.log('Kết quả trả về từ server:', res);
+  if (res && res.username) {
+    // Lưu user vào localStorage thông qua AuthService
+    this.authService.login(res, 'dummy-token');
+    this.router.navigate(['/dashboard']);
+  } else {
+    alert('Phản hồi từ server không hợp lệ!');
   }
+},
+    error: () => alert('Đăng nhập thất bại!')
+  });
+}
 }

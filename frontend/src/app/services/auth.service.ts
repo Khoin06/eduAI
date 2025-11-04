@@ -1,19 +1,44 @@
 // src/app/services/auth.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = `${'http://localhost:8080/api'}/auth`;
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  private platformId = inject(PLATFORM_ID);
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
-
-  login(credentials: { username: string; password: string }) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials)
-      .pipe(tap(res => localStorage.setItem('token', res.token)));
+  constructor() {
+    // KHỞI TẠO TRẠNG THÁI LOGIN TỪ localStorage
+    this.isLoggedInSubject.next(this.hasToken());
   }
-register(user: any) {
-  return this.http.post(`${this.apiUrl}/register`, user);
+  login(userData: any, token: string) {
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('token', token);
+    this.loggedIn.next(true); // ✅ Cập nhật trạng thái
+  }
+
+
+  // THÊM HÀM hasToken()
+  hasToken(): boolean {
+     return !!localStorage.getItem('token');
+  }
+
+  // DÙNG TRONG LOGIN
+  setLoggedIn(value: boolean) {
+     this.loggedIn.next(value);
+  }
+
+getCurrentUser(): any {
+  const user = localStorage.getItem('current_user');
+  return user ? JSON.parse(user) : null;
 }
+
+  logout() {
+   localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.loggedIn.next(false); 
+  }
 }

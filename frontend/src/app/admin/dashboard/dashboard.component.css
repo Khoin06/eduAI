@@ -1,0 +1,26 @@
+/* src/app/pages/dashboard/dashboard.component.css */
+.dashboard-content {
+  margin-left: 260px;
+  min-height: 100vh;
+  background: #f8f9fc;
+  transition: margin-left 0.3s ease;
+}
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .dashboard-content {
+    margin-left: 0 !important;
+  }
+}
+.stat-card, .course-card {
+  transition: all 0.3s ease;
+}
+.stat-card:hover, .course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1) !important;
+}

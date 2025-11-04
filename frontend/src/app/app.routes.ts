@@ -1,31 +1,62 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
+import { authGuard } from './interceptors/auth.guard';
 
 export const routes: Routes = [
-  {
+    {
     path: '',
-    loadComponent: () =>
-      import('./course/course-list/course-list.component').then((m) => m.CourseListComponent),
+    redirectTo: '/login',
+    // loadComponent: () =>
+    //      import('./auth/login/login.component').then((m) => m.LoginComponent),
+    pathMatch: 'full',
   },
   {
     path: 'login',
     loadComponent: () => import('./auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./auth/register/register.component').then((m) => m.RegisterComponent),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./admin/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canMatch: [authGuard]
+  },
+  {
+    path: 'courses',
+    loadComponent: () =>
+      import('./admin/course-manager/course-manager.component').then(
+        (m) => m.CourseManagementComponent
+      ),
+  },
+
+  {
     path: 'course/:id',
     loadComponent: () =>
       import('./course/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
+  },
+  {
+    path: 'certificates',
+    loadComponent: () =>
+      import('./pages/certificates/certificates').then((m) => m.Certificates),
+  },
+  {
+    path: 'progress',
+    loadComponent: () =>
+      import('./pages/progress/progress').then((m) => m.Progress),
   },
   {
     path: 'lesson/:id',
     loadComponent: () =>
       import('./lesson/lesson-viewer/lesson-viewer.component').then((m) => m.LessonViewerComponent),
   },
-  // { path: 'chat/:id', loadComponent: () => import('./chat-box/chat-box.component').then(m => m.ChatBoxComponent) },
   {
-    path: 'register',
+    path: 'chat/:lessonId',
     loadComponent: () =>
-      import('./auth/register/register.component').then((m) => m.RegisterComponent),
+      import('./chat/chat-box/chat-box.component').then((m) => m.ChatBoxComponent),
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/login' },
 ];

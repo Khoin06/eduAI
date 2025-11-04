@@ -11,15 +11,15 @@ import com.example.demo.model.Lesson;
 import com.example.demo.model.User;
 
 public class ChatController {
-    @PostMapping("/chat")
-public ResponseEntity<ChatResponse> chat(
-    @RequestBody ChatRequest request,
-    @AuthenticationPrincipal User user) {
+//     @PostMapping("/chat")
+// public ResponseEntity<ChatResponse> chat(
+//     @RequestBody ChatRequest request,
+//     @AuthenticationPrincipal User user) {
 
-    Lesson lesson = lessonService.getById(request.getLessonId());
-    String answer = openAiService.askQuestion(lesson.getContent(), request.getQuestion());
+//     Lesson lesson = lessonService.getById(request.getLessonId());
+//     String answer = openAiService.askQuestion(lesson.getContent(), request.getQuestion());
 
-    ChatMessage msg = chatService.save(user, request.getQuestion(), answer);
-    return ResponseEntity.ok(new ChatResponse(msg));
-}
+//     ChatMessage msg = chatService.save(user, request.getQuestion(), answer);
+//     return ResponseEntity.ok(new ChatResponse(msg));
+// }
 }

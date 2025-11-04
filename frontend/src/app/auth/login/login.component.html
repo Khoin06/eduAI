@@ -1,46 +1,73 @@
 <!-- src/app/auth/login/login.component.html -->
-<div class="login-container">
-  <div class="login-card">
-    <h2 class="text-center mb-4">Đăng nhập EduAI</h2>
+<div class="d-flex overflow-hidden align-items-center bg-white py-5">
+  <div class="container">
+    <div class="row align-items-center g-5">
 
-    <form (ngSubmit)="login()">
-      <div class="mb-3">
-        <input
-          [(ngModel)]="credentials.username"
-          name="username"
-          class="form-control"
-          placeholder="Tên đăng nhập"
-          required
-        />
+      <!-- TRÁI: Ảnh minh họa -->
+
+  <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-light position-relative overflow-hidden">
+    <img 
+      src="/assets/images/background.jpg" 
+      alt="Đăng ký học tập cùng EduAI" 
+      class="img-fluid position-relative"
+      style="max-width: 90%; z-index: 1;"
+    >
+  </div>
+      <!-- PHẢI: Form đăng nhập -->
+      <div class="col-lg-6 d-flex justify-content-center">
+        <div class="w-100" style="max-width: 400px;">
+          <h1 class="h4 fw-bold mb-2 text-dark">
+            Đăng nhập để tiếp tục hành trình học tập của bạn
+          </h1>
+
+          <form (ngSubmit)="login()" #loginForm="ngForm">
+                        <div class="mb-3">
+              <input
+                type="username"
+                class="form-control form-control-lg"
+                [(ngModel)]="username"
+                name="username"
+                placeholder="username"
+                required
+                [disabled]="isLoading"
+                style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0; padding: 0 1rem;"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="password"
+                class="form-control form-control-lg"
+                [(ngModel)]="password"
+                name="password"
+                placeholder="password"
+                required
+                [disabled]="isLoading"
+                style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0; padding: 0 1rem;"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-lg w-100 fw-semibold text-white"
+              [disabled]="isLoading || !loginForm.valid"
+              style="height: 56px; border-radius: 8px; background: #a435f0; border: none;"
+            >
+              {{ isLoading ? 'Đang xử lý...' : 'Tiếp tục' }}
+            </button>
+          </form>
+
+          <div class="d-flex align-items-center my-4">
+            <hr class="flex-grow-1"><span class="px-3 text-muted small">hoặc</span><hr class="flex-grow-1">
+          </div>
+
+
+          <div class="text-center mt-4">
+            <p class="mb-0 text-muted small">
+              Bạn không có tài khoản? <a routerLink="/register" class="text-primary fw-semibold">Đăng ký</a>
+            </p>
+          </div>
+        </div>
       </div>
-
-      <div class="mb-3">
-        <input
-          [(ngModel)]="credentials.password"
-          name="password"
-          type="password"
-          class="form-control"
-          placeholder="Mật khẩu"
-          required
-        />
-      </div>
-
-      <div *ngIf="error" class="alert alert-danger">
-        {{ error }}
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        [disabled]="isLoading"
-      >
-        {{ isLoading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
-      </button>
-    </form>
-
-    <p class="text-center mt-3">
-      Chưa có tài khoản?
-      <a routerLink="/register">Đăng ký</a>
-    </p>
+    </div>
   </div>
 </div>

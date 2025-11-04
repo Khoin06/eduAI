@@ -14,50 +14,50 @@ import lombok.Value;
 @RequiredArgsConstructor
 public class OpenAiService {
 
-    @Value("${openai.api.key}")
-    private String apiKey;
+    // @Value("${openai.api.key}")
+    // private String apiKey;
 
-    @Value("${openai.model}")
-    private String model;
+    // @Value("${openai.model}")
+    // private String model;
 
-    private final OpenAiService openAiService;
+    // private final OpenAiService openAiService;
 
-    @Bean
-    public OpenAiService openAiService() {
-        return new OpenAiService(apiKey);
-    }
+    // @Bean
+    // public OpenAiService openAiService() {
+    //     return new OpenAiService(apiKey);
+    // }
 
-    public String askQuestion(String lessonContent, String question) {
-        String prompt = """
-            Bạn là trợ giảng AI cho bài học sau:
-            %s
+    // public String askQuestion(String lessonContent, String question) {
+    //     String prompt = """
+    //         Bạn là trợ giảng AI cho bài học sau:
+    //         %s
 
-            Học viên hỏi: %s
-            Trả lời ngắn gọn, dễ hiểu, bằng tiếng Việt.
-            """.formatted(lessonContent, question);
+    //         Học viên hỏi: %s
+    //         Trả lời ngắn gọn, dễ hiểu, bằng tiếng Việt.
+    //         """.formatted(lessonContent, question);
 
-        ChatCompletionRequest request = ChatCompletionRequest.builder()
-            .model(model)
-            .messages(List.of(new ChatMessage("user", prompt)))
-            .maxTokens(500)
-            .build();
+    //     ChatCompletionRequest request = ChatCompletionRequest.builder()
+    //         .model(model)
+    //         .messages(List.of(new ChatMessage("user", prompt)))
+    //         .maxTokens(500)
+    //         .build();
 
-        return openAiService.createChatCompletion(request)
-            .getChoices().get(0).getMessage().getContent();
-    }
+    //     return openAiService.createChatCompletion(request)
+    //         .getChoices().get(0).getMessage().getContent();
+    // }
 
-    public List<Quiz> generateQuiz(String lessonContent) {
-        String prompt = """
-            Tạo 5 câu hỏi trắc nghiệm từ nội dung sau.
-            Mỗi câu: câu hỏi, 4 đáp án (A,B,C,D), đáp án đúng.
-            Định dạng JSON:
-            [{"question": "...", "options": ["A. ...", "B. ..."], "answer": "A"}]
+    // public List<Quiz> generateQuiz(String lessonContent) {
+    //     String prompt = """
+    //         Tạo 5 câu hỏi trắc nghiệm từ nội dung sau.
+    //         Mỗi câu: câu hỏi, 4 đáp án (A,B,C,D), đáp án đúng.
+    //         Định dạng JSON:
+    //         [{"question": "...", "options": ["A. ...", "B. ..."], "answer": "A"}]
 
-            Nội dung bài học:
-            %s
-            """.formatted(lessonContent);
+    //         Nội dung bài học:
+    //         %s
+    //         """.formatted(lessonContent);
 
-        // Gọi OpenAI...
-        // Parse JSON → List<Quiz>
-    }
+    //     // Gọi OpenAI...
+    //     // Parse JSON → List<Quiz>
+    // }
 }
