@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => console.error('Lỗi API khóa học:', err)
     });
-    this.loadMyCourses();
+    // this.loadMyCourses();
   }
 // src/app/pages/dashboard/dashboard.component.ts
 loadMyCourses() {

@@ -28,18 +28,17 @@ public class CourseController {
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
+    @GetMapping("/my-courses/{userId}")
+    public List<Course> getMyCourses(@PathVariable Long userId) {
+        List<Course> courses = courseService.getCoursesByUserId(userId);
+        System.out.println(">>> UserID: " + userId + " - Courses found: " + courses.size());
+        return courses;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         Course course = courseService.getCourseById(id);
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/my-courses/{userId}")
-    public List<Course> getMyCourses(@RequestParam Long userId) {
-        List<Course> courses = courseService.getCoursesByUserId(userId);
-        System.out.println(">>> UserID: " + userId + " - Courses found: " + courses.size());
-        return courses;
     }
 
     @GetMapping("/{courseId}/lessons")

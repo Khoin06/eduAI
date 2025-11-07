@@ -1,19 +1,87 @@
-<!-- src/app/pages/course-detail/course-detail.component.html -->
-<div class="container py-5" *ngIf="course">
-  <h1 class="display-5 fw-bold">{{ course.title }}</h1>
-  <p class="lead text-muted">{{ course.description }}</p>
+<!-- HIỂN THỊ TRẠNG THÁI ĐANG LOAD -->
+<div *ngIf="isLoading" class="text-center text-muted py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-3">Đang tải dữ liệu khóa học...</p>
+</div>
 
-  <hr class="my-4">
+<!-- KHI CÓ DỮ LIỆU -->
+<div class="container py-5" *ngIf="!isLoading && (course || (lessons && lessons.length > 0))">
+  <h1 class="display-5 fw-bold">{{ course?.title }}</h1>
+  <p class="lead text-muted">{{ course?.description }}</p>
 
+  <hr class="my-4" />
+
+  <!-- DANH SÁCH BÀI HỌC -->
   <h4>Nội dung khóa học ({{ lessons.length }} bài)</h4>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item d-flex justify-content-between align-items-center" 
-        *ngFor="let lesson of lessons; let i = index">
+
+  <ul class="list-group list-group-flush mt-3">
+    <li
+      *ngFor="let lesson of lessons; let i = index"
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
       <div>
         <strong>{{ i + 1 }}. {{ lesson.title }}</strong>
         <small class="text-muted d-block">{{ lesson.duration }} phút</small>
       </div>
-      <span class="badge bg-primary rounded-pill">Xem</span>
+
+      <button
+        class="btn btn-primary btn-sm rounded-pill"
+        (click)="selectLesson(lesson)"
+      >
+        Xem
+      </button>
     </li>
   </ul>
+
+  <!-- CHI TIẾT BÀI HỌC -->
+  <div *ngIf="selectedLesson" class="card mt-4 shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">{{ selectedLesson.title }}</h5>
+    </div>
+    <div class="card-body">
+      <!-- VIDEO -->
+      <video
+        *ngIf="selectedLesson.videoUrl"
+        [src]="selectedLesson.videoUrl"
+        class="w-100 mb-3 rounded"
+        controls
+      ></video>
+
+      <!-- NỘI DUNG -->
+      <div [innerHTML]="selectedLesson.content"></div>
+
+      <!-- QUIZ -->
+      <div
+        *ngIf="selectedLesson.quiz"
+        class="mt-4 p-3 border rounded bg-light shadow-sm"
+      >
+        <h6 class="text-success">Quiz kiểm tra</h6>
+        <p><strong>{{ selectedLesson.quiz.question }}</strong></p>
+
+        <div class="form-check" *ngFor="let opt of selectedLesson.quiz.options">
+          <input
+            class="form-check-input"
+            type="radio"
+            [name]="'q' + selectedLesson.id"
+            [id]="'opt' + opt.id"
+          />
+          <label class="form-check-label" [for]="'opt' + opt.id">
+            {{ opt.text }}
+          </label>
+        </div>
+
+        <button class="btn btn-success btn-sm mt-3">Nộp bài</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THÔNG BÁO KHI CHƯA CHỌN BÀI -->
+  <div *ngIf="!selectedLesson" class="text-center text-muted py-5">
+    Chọn một bài học để xem nội dung
+  </div>
+</div>
+
+<!-- KHI KHÔNG CÓ DỮ LIỆU -->
+<div *ngIf="!isLoading && lessons.length === 0" class="text-center text-muted py-5">
+  Không có bài học nào trong khóa học này.
 </div>
