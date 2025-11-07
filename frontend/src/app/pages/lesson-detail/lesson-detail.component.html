@@ -1,0 +1,27 @@
+<div class="container py-5" *ngIf="!isLoading && lesson">
+  <h2 class="fw-bold mb-3">{{ lesson.title }}</h2>
+  <hr>
+
+  <div class="lesson-content">
+    <p [innerHTML]="lesson.content"></p>
+  </div>
+
+  <div *ngIf="quiz" class="mt-4 p-3 border rounded bg-light">
+    <h5 class="text-success">Quiz kiểm tra</h5>
+    <p><strong>{{ quiz.question }}</strong></p>
+
+    <div class="form-check" *ngFor="let opt of quiz.options">
+      <input class="form-check-input" type="radio" [name]="'quiz' + quiz.id" [id]="'opt' + opt.id">
+      <label class="form-check-label" [for]="'opt' + opt.id">{{ opt.text }}</label>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">← Quay lại khóa học</a>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="text-center py-5 text-muted">
+  <div class="spinner-border text-primary"></div>
+  <p>Đang tải bài học...</p>
+</div>

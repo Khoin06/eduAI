@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-course-detail',
@@ -16,7 +16,7 @@ export class CourseDetailComponent implements OnInit {
   selectedLesson: any = null;
   isLoading = true;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     const courseId = this.route.snapshot.paramMap.get('id');
@@ -64,4 +64,8 @@ export class CourseDetailComponent implements OnInit {
         error: () => console.log('Không có quiz cho bài này'),
       });
   }
+  goToLessonDetail(lessonId: number) {
+   console.log('➡️ Chuyển tới bài học ID:', lessonId);
+    this.router.navigate(['/lesson', lessonId]);
+}
 }

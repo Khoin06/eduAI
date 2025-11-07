@@ -43,6 +43,11 @@ export const routes: Routes = [
       import('./course/course-list/course-list.component').then((m) => m.CourseListComponent),
     //  canActivate: [adminGuard] 
     },
+      {
+    path: 'lesson/:id',
+    loadComponent: () =>
+      import('./pages/lesson-detail/lesson-detail.component').then(m => m.LessonDetailComponent)
+  },
   {
     path: 'certificates',
     loadComponent: () =>

@@ -11,34 +11,48 @@ export class AuthService {
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor() {
-    // KHỞI TẠO TRẠNG THÁI LOGIN TỪ localStorage
+    // ✅ Khởi tạo trạng thái login
     this.isLoggedInSubject.next(this.hasToken());
   }
+
+  /**
+   * ✅ Gọi khi login thành công
+   */
   login(userData: any, token: string) {
-    localStorage.setItem('user', JSON.stringify(userData));
+    // Lưu user vào localStorage với key thống nhất
+    localStorage.setItem('current_user', JSON.stringify(userData));
     localStorage.setItem('token', token);
-    this.isLoggedInSubject.next(true); // ✅ Cập nhật trạng thái
+    this.isLoggedInSubject.next(true);
   }
 
-
-  // THÊM HÀM hasToken()
+  /**
+   * ✅ Kiểm tra có token hay không
+   */
   hasToken(): boolean {
-     return !!localStorage.getItem('token');
+    return !!localStorage.getItem('token');
   }
 
-  // DÙNG TRONG LOGIN
-  setLoggedIn(value: boolean) {
-     this.isLoggedInSubject.next(value);
+  /**
+   * ✅ Lấy thông tin user hiện tại
+   */
+  getCurrentUser(): any {
+    const user = localStorage.getItem('current_user');
+    return user ? JSON.parse(user) : null;
   }
 
-getCurrentUser(): any {
-  const user = localStorage.getItem('user');
-  return user ? JSON.parse(user) : null;
-}
-
+  /**
+   * ✅ Đăng xuất
+   */
   logout() {
-   localStorage.removeItem('user');
+    localStorage.removeItem('current_user');
     localStorage.removeItem('token');
-    this.loggedIn.next(false); 
+    this.isLoggedInSubject.next(false);
+  }
+
+  /**
+   * ✅ Dùng trong guard hoặc header
+   */
+  setLoggedIn(value: boolean) {
+    this.isLoggedInSubject.next(value);
   }
 }

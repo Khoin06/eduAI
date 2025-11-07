@@ -12,6 +12,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    @Query("SELECT c FROM Course c JOIN UserCourse uc ON c.id = uc.courseId WHERE uc.userId = :userId")
-List<Course> findCoursesByUserId(@Param("userId") Long userId);
+
+    @Query(value = """
+        SELECT c.* 
+        FROM courses c
+        INNER JOIN user_courses uc ON uc.course_id = c.id
+        WHERE uc.user_id = :userId
+        """, nativeQuery = true)
+    List<Course> findCoursesByUserId(@Param("userId") Long userId);
 }

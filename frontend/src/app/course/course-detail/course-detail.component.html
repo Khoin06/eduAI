@@ -24,12 +24,12 @@
         <small class="text-muted d-block">{{ lesson.duration }} phút</small>
       </div>
 
-      <button
-        class="btn btn-primary btn-sm rounded-pill"
-        (click)="selectLesson(lesson)"
-      >
-        Xem
-      </button>
+<button
+  class="btn btn-primary btn-sm rounded-pill"
+  (click)="goToLessonDetail(lesson.id)">
+  Xem
+</button>
+
     </li>
   </ul>
 
@@ -39,13 +39,7 @@
       <h5 class="mb-0">{{ selectedLesson.title }}</h5>
     </div>
     <div class="card-body">
-      <!-- VIDEO -->
-      <video
-        *ngIf="selectedLesson.videoUrl"
-        [src]="selectedLesson.videoUrl"
-        class="w-100 mb-3 rounded"
-        controls
-      ></video>
+ 
 
       <!-- NỘI DUNG -->
       <div [innerHTML]="selectedLesson.content"></div>

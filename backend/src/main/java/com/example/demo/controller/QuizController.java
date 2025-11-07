@@ -15,9 +15,12 @@ public class QuizController {
 
     // LẤY QUIZ CỦA 1 BÀI HỌC
     @GetMapping("/lesson/{lessonId}")
-    public ResponseEntity<Quiz> getQuizByLesson(@PathVariable Long lessonId) {
+    public ResponseEntity<?> getQuizByLesson(@PathVariable Long lessonId) {
         Quiz quiz = quizService.findByLessonId(lessonId);
-        return quiz != null ? ResponseEntity.ok(quiz) : ResponseEntity.notFound().build();
+        if (quiz == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quiz);
     }
 
     // LẤY QUIZ THEO ID
