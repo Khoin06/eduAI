@@ -17,7 +17,7 @@ export class AuthService {
   login(userData: any, token: string) {
     localStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('token', token);
-    this.loggedIn.next(true); // ✅ Cập nhật trạng thái
+    this.isLoggedInSubject.next(true); // ✅ Cập nhật trạng thái
   }
 
 
@@ -28,11 +28,11 @@ export class AuthService {
 
   // DÙNG TRONG LOGIN
   setLoggedIn(value: boolean) {
-     this.loggedIn.next(value);
+     this.isLoggedInSubject.next(value);
   }
 
 getCurrentUser(): any {
-  const user = localStorage.getItem('current_user');
+  const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 }
 

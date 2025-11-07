@@ -1,11 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
 html, body {
   height: 100%;
-  overflow: hidden;
+  margin: 0;
+  overflow-x: hidden;
 }
 
-app-login {
-  display: block;
-  height: 100vh;
-  overflow: hidden;
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Đảm bảo nội dung chính cuộn được */
+.dashboard-content, .container {
+  flex: 1;
+}
+/* src/styles.css */
+.dropdown-menu {
+  z-index: 1055 !important;
+}
+
+.position-absolute {
+  position: absolute !important;
 }

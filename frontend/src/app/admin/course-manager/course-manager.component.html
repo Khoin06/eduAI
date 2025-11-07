@@ -8,46 +8,85 @@
   </button>
 
   <!-- BẢNG KHÓA HỌC -->
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th>Tên khóa</th>
-          <th>Giảng viên</th>
-          <th>Giá</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of courses; let i = index">
-          <td>{{ course.name }}</td>
-          <td>{{ course.instructor }}</td>
-          <td>{{ course.price }}</td>
-          <td>
-            <button (click)="editCourse(i)" class="btn btn-sm btn-warning me-1">Sửa</button>
-            <button (click)="deleteCourse(i)" class="btn btn-sm btn-danger">Xóa</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Khóa học của tôi</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">Tên khóa</th>
+              <th>Giảng viên</th>
+              <th class="text-center">Giá</th>
+              <th class="text-center">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let course of userCourses">
+              <td class="ps-4">
+                <div class="d-flex align-items-center">
+                  <img [src]="course.imageUrl" class="rounded me-3" width="50" height="50">
+                  <div>
+                    <a [routerLink]="['/course', course.id]" class="text-decoration-none text-primary fw-semibold">
+                      {{ course.title }}
+                    </a>
+                    <small class="text-muted d-block">{{ course.description | slice:0:50 }}...</small>
+                  </div>
+                </div>
+              </td>
+              <td>{{ course.instructor || 'Chưa có' }}</td>
+              <td class="text-center">{{ course.price | currency:'VND':'symbol':'1.0-0' }}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-danger" (click)="removeFromUser(course.id)">
+                  Xóa
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center py-5" *ngIf="userCourses.length === 0">
+        <p class="text-muted">Chưa có khóa học nào.</p>
+      </div>
+    </div>
   </div>
 
-  <!-- MODAL THÊM/SỬA -->
-  <div class="modal fade show d-block" *ngIf="showModal" style="background:rgba(0,0,0,0.5)">
-    <div class="modal-dialog">
+<!-- MODAL CHỌN KHÓA HỌC -->
+  <div class="modal fade" #addModal tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{ isEdit ? 'Sửa' : 'Thêm' }} khóa học</h5>
-          <button (click)="closeModal()" class="btn-close"></button>
+          <h5 class="modal-title">Chọn khóa học để thêm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <!-- <input [(ngModel)]="tempCourse.name" placeholder="Tên khóa học" class="form-control mb-2">
-          <input [(ngModel)]="tempCourse.instructor" placeholder="Giảng viên" class="form-control mb-2">
-          <input [(ngModel)]="tempCourse.price" type="number" placeholder="Giá (VND)" class="form-control"> -->
+          <input type="text" class="form-control mb-3" placeholder="Tìm kiếm..." [(ngModel)]="searchTerm">
+          
+          <div class="row g-3" style="max-height: 450px; overflow-y: auto;">
+            <div class="col-md-6" *ngFor="let course of allCourses | filter:searchTerm:'title'">
+              <div class="border p-3 rounded d-flex align-items-center cursor-pointer hover-shadow"
+                   [class.bg-light]="selectedCourses.includes(course.id)"
+                   (click)="toggleSelect(course.id)">
+                <img [src]="course.imageUrl || '/assets/images/course-default.jpg'" 
+                     class="rounded me-3" width="60" height="60" style="object-fit: cover;">
+                <div class="flex-grow-1">
+                  <strong>{{ course.title }}</strong>
+                  <small class="d-block text-muted">
+                    {{ course.instructor || 'Chưa có' }} • {{ course.price | currency:'VND':'symbol':'1.0-0' }}
+                  </small>
+                </div>
+                <i class="fas fa-check text-success ms-2" *ngIf="selectedCourses.includes(course.id)"></i>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button (click)="closeModal()" class="btn btn-secondary">Hủy</button>
-          <button (click)="saveCourse()" class="btn btn-success">Lưu</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-success" (click)="addSelected()" data-bs-dismiss="modal">
+            Thêm ({{ selectedCourses.length }})
+          </button>
         </div>
       </div>
     </div>

@@ -21,21 +21,29 @@ export class LoginComponent {
   constructor(private http: HttpClient,private app: AppComponent,private authService: AuthService,private router: Router) {}
 
 login() {
+this.isLoading = true;
+
   this.http.post<any>('http://localhost:8080/api/auth/login', {
     username: this.username,
     password: this.password
   }).subscribe({
-next: (res) => {
-  console.log('Kết quả trả về từ server:', res);
-  if (res && res.username) {
-    // Lưu user vào localStorage thông qua AuthService
-    this.authService.login(res, 'dummy-token');
-    this.router.navigate(['/dashboard']);
-  } else {
-    alert('Phản hồi từ server không hợp lệ!');
-  }
-},
-    error: () => alert('Đăng nhập thất bại!')
+    next: (res) => {
+      console.log('Login response:', res);
+
+      // LẤY userId, username, token
+      const userData = { id: res.id, username: res.username };
+      const token = res.token; // Backend phải trả token
+
+      // LƯU QUA AuthService
+      this.authService.login(userData, token);
+
+      // CHUYỂN HƯỚNG
+      this.router.navigate(['/dashboard']);
+    },
+    error: () => {
+      alert('Đăng nhập thất bại!');
+      this.isLoading = false;
+    }
   });
 }
 }

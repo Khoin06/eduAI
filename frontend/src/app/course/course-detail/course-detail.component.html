@@ -1,6 +1,19 @@
-<!-- src/app/course/course-detail/course-detail.component.html -->
-<div class="container mt-4" *ngIf="course">
-  <h2>{{ course.title }}</h2>
-  <p>{{ course.description }}</p>
-  <a routerLink="/" class="btn btn-secondary">Quay lại</a>
+<!-- src/app/pages/course-detail/course-detail.component.html -->
+<div class="container py-5" *ngIf="course">
+  <h1 class="display-5 fw-bold">{{ course.title }}</h1>
+  <p class="lead text-muted">{{ course.description }}</p>
+
+  <hr class="my-4">
+
+  <h4>Nội dung khóa học ({{ lessons.length }} bài)</h4>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item d-flex justify-content-between align-items-center" 
+        *ngFor="let lesson of lessons; let i = index">
+      <div>
+        <strong>{{ i + 1 }}. {{ lesson.title }}</strong>
+        <small class="text-muted d-block">{{ lesson.duration }} phút</small>
+      </div>
+      <span class="badge bg-primary rounded-pill">Xem</span>
+    </li>
+  </ul>
 </div>

@@ -29,13 +29,13 @@
         <ng-container *ngIf="authService.isLoggedIn$ | async">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white" href="#" role="button" data-bs-toggle="dropdown">
-              <img [src]="currentUser?.avatar || '/assets/images/avatar-default.png'" 
+              <img [src]="currentUser?.avatar || '/assets/images/background.jpg'" 
                    alt="Avatar" class="rounded-circle" width="32" height="32">
               <span>{{ currentUser?.fullName || 'User' }}</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" routerLink="/profile"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
-              <li><a class="dropdown-item" routerLink="/settings"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow position-absolute">
+              <li><a class="dropdown-item" routerLink="/profile" routerLinkActive="active"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
+              <!-- <li><a class="dropdown-item" routerLink="/settings"><i class="fas fa-cog me-2"></i> Cài đặt</a></li> -->
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item text-danger" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
             </ul>

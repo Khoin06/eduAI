@@ -38,6 +38,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./course/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
   },
+  { path: 'admin/courses', 
+    loadComponent: () =>
+      import('./course/course-list/course-list.component').then((m) => m.CourseListComponent),
+    //  canActivate: [adminGuard] 
+    },
   {
     path: 'certificates',
     loadComponent: () =>
@@ -48,6 +53,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/progress/progress').then((m) => m.Progress),
   },
+  { path: 'profile', 
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
+    canActivate: [authGuard] },
   {
     path: 'lesson/:id',
     loadComponent: () =>

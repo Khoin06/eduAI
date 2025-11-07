@@ -1,60 +1,107 @@
 // src/app/pages/course-management/course-management.component.ts
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
-interface Course {
-  name: string;
-  instructor: string;
-  price: number;
-}
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-course-management',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule, RouterModule, FilterPipe], // THÊM RouterModule
   templateUrl: './course-manager.component.html',
 })
-export class CourseManagementComponent {
-  courses: Course[] = [
-    { name: 'Angular Cơ bản', instructor: 'Nguyễn Văn A', price: 1200000 },
-    { name: 'ReactJS Pro', instructor: 'Trần Thị B', price: 1500000 }
-  ];
+export class CourseManagementComponent implements OnInit {
+  @ViewChild('addModal') addModal!: ElementRef;
 
-  showModal = false;
-  isEdit = false;
-  editIndex = -1;
-  tempCourse: Course = { name: '', instructor: '', price: 0 };
+  userCourses: any[] = [];
+  allCourses: any[] = [];
+  selectedCourses: number[] = [];
+  searchTerm = '';
+  userId!: number; // KHÔNG FIX CỨNG
+  private modalInstance: any;
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.loadUserId(); // TỰ ĐỘNG LẤY TỪ localStorage
+    this.loadUserCourses();
+    this.loadAllCourses();
+  }
+  ngAfterViewInit() {
+    // KHỞI TẠO MODAL BẰNG BOOTSTRAP JS
+    this.modalInstance = new bootstrap.Modal(this.addModal.nativeElement);
+  }
+  // LẤY userId TỪ localStorage
+  loadUserId() {
+    const user = JSON.parse(localStorage.getItem('current_user') || '{}');
+    if (user?.id) {
+      this.userId = user.id;
+    } else {
+      alert('Vui lòng đăng nhập!');
+      // Tùy chọn: redirect về login
+    }
+  }
+
+  loadUserCourses() {
+    this.http
+      .get<any[]>(`http://localhost:8080/api/courses/my-courses`, {
+        params: { userId: this.userId },
+      })
+      .subscribe({
+        next: (data) => (this.userCourses = data || []),
+        error: () => {
+          this.userCourses = [];
+          alert('Lỗi tải!');
+        },
+      });
+  }
+
+  loadAllCourses() {
+    this.http.get<any[]>('http://localhost:8080/api/courses').subscribe((data) => {
+      this.allCourses = data;
+    });
+  }
 
   openAddModal() {
-    this.isEdit = false;
-    this.tempCourse = { name: '', instructor: '', price: 0 };
-    this.showModal = true;
+    this.selectedCourses = [];
+    this.searchTerm = '';
+    this.modalInstance.show();
   }
 
-  editCourse(index: number) {
-    this.isEdit = true;
-    this.editIndex = index;
-    this.tempCourse = { ...this.courses[index] };
-    this.showModal = true;
-  }
-
-  saveCourse() {
-    if (this.tempCourse.name && this.tempCourse.price > 0) {
-      if (this.isEdit) {
-        this.courses[this.editIndex] = { ...this.tempCourse };
-      } else {
-        this.courses.push({ ...this.tempCourse });
-      }
-      this.closeModal();
+  toggleSelect(courseId: number) {
+    const index = this.selectedCourses.indexOf(courseId);
+    if (index === -1) {
+      this.selectedCourses.push(courseId);
+    } else {
+      this.selectedCourses.splice(index, 1);
     }
   }
 
-  deleteCourse(index: number) {
-    if (confirm('Xóa khóa học này?')) {
-      this.courses.splice(index, 1);
-    }
+  addSelected() {
+    if (this.selectedCourses.length === 0) return;
+
+    const payload = this.selectedCourses.map((courseId) => ({
+      userId: this.userId,
+      courseId,
+    }));
+
+    this.http.post('http://localhost:8080/api/user-courses/batch', payload).subscribe({
+      next: () => {
+        this.loadUserCourses();
+        this.selectedCourses = [];
+        this.modalInstance.hide();
+      },
+      error: () => alert('Thêm thất bại!'),
+    });
   }
 
-  closeModal() {
-    this.showModal = false;
+  removeFromUser(courseId: number) {
+    if (confirm('Xóa khỏi danh sách của bạn?')) {
+      this.http
+        .delete(`http://localhost:8080/api/user-courses?userId=${this.userId}&courseId=${courseId}`)
+        .subscribe(() => this.loadUserCourses());
+    }
   }
 }

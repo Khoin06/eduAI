@@ -14,7 +14,14 @@
 }
 
 .dropdown-menu {
-  min-width: 200px;
+  z-index: 1055 !important; /* CAO HƠN MỌI THỨ */
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0.5rem;
+}
+
+.dropdown-menu-end {
+  right: 0;
+  left: auto;
 }
 
 .dropdown-item {

@@ -44,13 +44,17 @@ public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Str
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody User loginUser) {
-    User user = userRepo.findByUsername(loginUser.getUsername());
+User user = userRepo.findByUsername(loginUser.getUsername());
+    
     if (user == null || !user.getPassword().equals(loginUser.getPassword())) {
         return ResponseEntity.badRequest().body("Sai thông tin!");
     }
-    return ResponseEntity.ok(Map.of(
-        "id", user.getId(),
-        "username", user.getUsername()
-    ));
+
+    // DÙNG HashMap ĐỂ TRẢ DỮ LIỆU
+    Map<String, Object> response = new HashMap<>();
+    response.put("id", user.getId());
+    response.put("username", user.getUsername());
+
+    return ResponseEntity.ok(response);
 }
 }
