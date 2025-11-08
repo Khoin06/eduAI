@@ -69,17 +69,6 @@ public class CourseController {
         return ResponseEntity.ok().build();
     }
 
-    // CourseController.java
-    @PostMapping("/user-courses/batch")
-    public ResponseEntity<?> addBatch(@RequestBody List<UserCourse> list) {
-        userCourseService.addBatch(list);
-        return ResponseEntity.ok("Thêm thành công!");
-    }
 
-    @DeleteMapping("/user-courses")
-    public ResponseEntity<?> remove(@RequestParam Long userId, @RequestParam Long courseId) {
-        userCourseService.remove(userId, courseId);
-        return ResponseEntity.ok().build();
-    }
 
 }

@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_courses")
-@IdClass(UserCourseId.class)
 public class UserCourse {
     @Id
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // ✅ có thể auto-increment
+
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Id
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     private Long courseId;
 
     private LocalDateTime enrolledAt = LocalDateTime.now();

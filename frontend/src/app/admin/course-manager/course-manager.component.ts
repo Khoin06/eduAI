@@ -120,7 +120,7 @@ export class CourseManagementComponent implements OnInit {
 
     console.log('📤 Gửi payload thêm khóa:', payload);
 
-    this.http.post('http://localhost:8080/api/user-courses/batch', payload)
+    this.http.post('http://localhost:8080/api/courses/user-courses/batch', payload)
       .subscribe({
         next: () => {
           this.loadUserCourses();
@@ -137,17 +137,23 @@ export class CourseManagementComponent implements OnInit {
   /**
    * ❌ Xóa khóa học khỏi danh sách user_courses
    */
-  removeFromUser(courseId: number) {
-    if (confirm('Bạn có chắc muốn xóa khóa học này khỏi danh sách?')) {
-      const url = `http://localhost:8080/api/user-courses?userId=${this.userId}&courseId=${courseId}`;
-      console.log('🗑 Gọi API xóa:', url);
-
-      this.http.delete(url).subscribe({
-        next: () => this.loadUserCourses(),
-        error: (err) => console.error('❌ Xóa thất bại:', err),
+removeFromUser(courseId: number) {
+  if (confirm('Xóa khỏi danh sách của bạn?')) {
+    this.http
+      .delete(`http://localhost:8080/api/user-courses?userId=${this.userId}&courseId=${courseId}`, { responseType: 'json' })
+      .subscribe({
+        next: (res: any) => {
+          console.log('✅ Xóa thành công:', res);
+          this.loadUserCourses();
+        },
+        error: (err) => {
+          console.error('❌ Xóa thất bại:', err);
+          alert(err.error?.message || 'Không thể xóa khóa học!');
+        }
       });
-    }
   }
+}
+
 
   /**
    * 🔗 Điều hướng đến chi tiết khóa học

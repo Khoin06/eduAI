@@ -23,7 +23,12 @@ public class UserCourseService {
         });
     }
 
-    public void remove(Long userId, Long courseId) {
-        userCourseRepository.deleteByUserIdAndCourseId(userId, courseId);
+    public boolean remove(Long userId, Long courseId) {
+        return userCourseRepository.findByUserIdAndCourseId(userId, courseId)
+                .map(userCourse -> {
+                    userCourseRepository.delete(userCourse);
+                    return true;
+                })
+                .orElse(false);
     }
 }
