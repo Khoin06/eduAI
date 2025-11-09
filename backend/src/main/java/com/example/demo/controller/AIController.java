@@ -38,7 +38,7 @@ public class AIController {
 
         try {
             String prompt = """
-                    Bạn là trợ giảng lập trình. Tạo quiz trắc nghiệm ngắn và nội dung gợi ý chat từ nội dung sau:
+                    Bạn là trợ giảng lập trình. Tạo quiz 10 câu trắc nghiệm ngắn và nội dung gợi ý chat từ nội dung sau:
                     ---
                     %s
                     ---

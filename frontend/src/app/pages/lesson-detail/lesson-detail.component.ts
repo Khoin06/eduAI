@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatDialogComponent } from '../../lesson-detail/chat-dialog/chat-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-lesson-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './lesson-detail.component.html',
 })
 export class LessonDetailComponent implements OnInit {
@@ -18,7 +19,12 @@ export class LessonDetailComponent implements OnInit {
   isLoading = true;
   reachedBottom = false;
   showQuiz = false;
+userAnswers: string[] = []; // lưu đáp án người dùng chọn
+score: number | null = null; // điểm số
+submitted = false; // trạng thái đã nộp hay chưa
 
+isGeneratingQuiz = false; // trạng thái loading quiz AI
+quizError: string | null = null; // nếu lỗi AI
   constructor(private route: ActivatedRoute, private http: HttpClient, private dialog: MatDialog) {}
 
   ngOnInit() {
@@ -67,6 +73,9 @@ export class LessonDetailComponent implements OnInit {
   // 👇 Gọi API Gemini backend
   loadAISection() {
     const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+      this.isGeneratingQuiz = true;
+  this.quizError = null;
+  this.showQuiz = false;
     this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`).subscribe({
       next: (res) => {
         try {
@@ -81,14 +90,40 @@ export class LessonDetailComponent implements OnInit {
             // 🔹 Parse JSON sạch
             this.aiData = JSON.parse(cleaned);
             console.log('✅ AI data parsed:', this.aiData);
+            this.showQuiz = true;
           } else {
             console.warn('⚠️ Không có nội dung từ AI:', res);
+              this.quizError = 'Không nhận được dữ liệu từ AI.';
           }
         } catch (err) {
           console.error('❌ Lỗi parse AI JSON:', err, res);
+            this.quizError = 'Lỗi khi phân tích dữ liệu từ AI.';
         }
+         this.isGeneratingQuiz = false; // tắt loading
       },
-      error: (err) => console.error('AI error:', err),
+      error: (err) => {     console.error('AI error:', err);
+      this.quizError = 'Không thể kết nối đến AI. Vui lòng thử lại.';
+      this.isGeneratingQuiz = false}
     });
   }
+selectAnswer(questionIndex: number, option: string) {
+  this.userAnswers[questionIndex] = option;
+}
+
+submitQuiz() {
+  if (!this.aiData?.quiz) return;
+
+  let correctCount = 0;
+  this.aiData.quiz.forEach((q: any, i: number) => {
+    if (this.userAnswers[i] === q.correct) {
+      correctCount++;
+    }
+  });
+
+  this.score = correctCount;
+  this.submitted = true;
+
+  alert(`🎯 Bạn được ${correctCount}/${this.aiData.quiz.length} điểm!`);
+}
+
 }
