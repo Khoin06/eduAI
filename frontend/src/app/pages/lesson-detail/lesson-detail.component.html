@@ -11,12 +11,7 @@
     <h5 class="text-success">Quiz kiểm tra</h5>
     <p><strong>{{ quiz.question }}</strong></p>
     <div class="form-check" *ngFor="let opt of quiz.options">
-      <input
-        class="form-check-input"
-        type="radio"
-        [name]="'quiz' + quiz.id"
-        [id]="'opt' + opt.id"
-      />
+      <input class="form-check-input" type="radio" [name]="'quiz' + quiz.id" [id]="'opt' + opt.id" />
       <label class="form-check-label" [for]="'opt' + opt.id">
         {{ opt.text }}
       </label>
@@ -42,32 +37,29 @@
     <div *ngIf="aiData.suggestions" class="mt-3">
       <h5>Gợi ý hỏi AI:</h5>
       <div class="list-group">
-        <button
-          *ngFor="let s of aiData.suggestions"
-          class="list-group-item list-group-item-action"
-        >
+        <button *ngFor="let s of aiData.suggestions" class="list-group-item list-group-item-action">
           💬 {{ s }}
         </button>
       </div>
     </div>
   </div>
-<div class="ai-section">
-  <h3>🤖 Trợ giảng AI</h3>
+  <div class="ai-section">
+    <h3>🤖 Trợ giảng AI</h3>
 
-  <button (click)="openChatDialog()" class="btn btn-primary">💬 Hiển thị Chat AI</button>
-  <button (click)="loadAISection()" class="btn btn-outline-primary ms-2">🧩 Hiển thị Quiz</button>
+    <button (click)="openChatDialog()" class="btn btn-primary">💬 Hiển thị Chat AI</button>
+    <button (click)="loadAISection()" class="btn btn-outline-primary ms-2">🧩 Hiển thị Quiz</button>
 
-  <!-- Quiz AI -->
-  <div *ngIf="showQuiz && aiData?.quiz" class="mt-3 p-3 border rounded shadow-sm">
-    <h4>Bài Quiz AI tạo</h4>
-    <div *ngFor="let q of aiData.quiz; let i = index">
-      <p>{{i+1}}. {{q.question}}</p>
-      <ul>
-        <li *ngFor="let opt of q.options">{{opt}}</li>
-      </ul>
+    <!-- Quiz AI -->
+    <div *ngIf="showQuiz && aiData?.quiz" class="mt-3 p-3 border rounded shadow-sm">
+      <h4>Bài Quiz AI tạo</h4>
+      <div *ngFor="let q of aiData.quiz; let i = index">
+        <p>{{i+1}}. {{q.question}}</p>
+        <ul>
+          <li *ngFor="let opt of q.options">{{opt}}</li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
   <div class="mt-4">
     <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
       ← Quay lại khóa học

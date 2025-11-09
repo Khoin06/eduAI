@@ -19,7 +19,7 @@ export class LessonDetailComponent implements OnInit {
   reachedBottom = false;
   showQuiz = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient,private dialog: MatDialog) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private dialog: MatDialog) {}
 
   ngOnInit() {
     const lessonId = Number(this.route.snapshot.paramMap.get('id'));
@@ -43,22 +43,21 @@ export class LessonDetailComponent implements OnInit {
   //     error: () => console.log('Không có quiz cho bài này'),
   //   });
   // }
-toggleQuiz() {
-  this.showQuiz = !this.showQuiz;
-}
-openChatDialog() {
-  this.dialog.open(ChatDialogComponent, {
-    width: '600px',
-    height: '500px',
-    data: { suggestions: this.aiData?.suggestions || [] }
-  });
-}
+  toggleQuiz() {
+    this.showQuiz = !this.showQuiz;
+  }
+  openChatDialog() {
+    this.dialog.open(ChatDialogComponent, {
+      width: '600px',
+      height: '500px',
+      data: { suggestions: this.aiData?.suggestions || [] },
+    });
+  }
 
   // 👇 Khi scroll tới cuối, gọi AI
   @HostListener('window:scroll', [])
   onScroll() {
-    const scrollBottom =
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
+    const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
     if (scrollBottom && !this.reachedBottom) {
       this.reachedBottom = true;
       this.loadAISection();
@@ -66,35 +65,30 @@ openChatDialog() {
   }
 
   // 👇 Gọi API Gemini backend
-loadAISection() {
-  const lessonId = Number(this.route.snapshot.paramMap.get('id'));
-  this.http
-    .get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`)
-    .subscribe({
+  loadAISection() {
+    const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`).subscribe({
       next: (res) => {
-       try {
-  const text = res?.aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (text) {
-    // 🔹 Làm sạch chuỗi Markdown (bỏ ```json và ```)
-    const cleaned = text
-      .replace(/```json/g, '')
-      .replace(/```/g, '')
-      .trim();
+        try {
+          const text = res?.aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            // 🔹 Làm sạch chuỗi Markdown (bỏ ```json và ```)
+            const cleaned = text
+              .replace(/```json/g, '')
+              .replace(/```/g, '')
+              .trim();
 
-    // 🔹 Parse JSON sạch
-    this.aiData = JSON.parse(cleaned);
-    console.log('✅ AI data parsed:', this.aiData);
-  } else {
-    console.warn('⚠️ Không có nội dung từ AI:', res);
-  }
-} catch (err) {
-  console.error('❌ Lỗi parse AI JSON:', err, res);
-}
-
+            // 🔹 Parse JSON sạch
+            this.aiData = JSON.parse(cleaned);
+            console.log('✅ AI data parsed:', this.aiData);
+          } else {
+            console.warn('⚠️ Không có nội dung từ AI:', res);
+          }
+        } catch (err) {
+          console.error('❌ Lỗi parse AI JSON:', err, res);
+        }
       },
       error: (err) => console.error('AI error:', err),
     });
-}
-
-
+  }
 }
