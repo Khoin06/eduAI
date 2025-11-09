@@ -27,5 +27,6 @@ public class LessonController {
         Lesson lesson = lessonService.findById(lessonId);
         return lesson != null ? ResponseEntity.ok(lesson) : ResponseEntity.notFound().build();
     }
+    
 
 }

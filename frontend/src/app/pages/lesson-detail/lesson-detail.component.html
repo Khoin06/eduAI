@@ -81,8 +81,14 @@
       <label class="form-check-label">
         {{ opt }}
         <!-- Đánh dấu đúng/sai sau khi nộp -->
-        <span *ngIf="submitted && q.correct === opt" class="text-success ms-2">✔</span>
-        <span *ngIf="submitted && userAnswers[i] === opt && q.correct !== opt" class="text-danger ms-2">✖</span>
+        <span *ngIf="submitted && resultStatus[i] === 'correct' && opt.charAt(0) === q.answer" style="color: green">
+        ✅
+      </span>
+
+      <!-- ❌ icon sai (chỉ hiển thị với option user chọn sai) -->
+      <span *ngIf="submitted && resultStatus[i] === 'wrong' && userAnswers[i] === opt.charAt(0)" style="color: red">
+        ❌
+      </span>
       </label>
     </div>
   </div>

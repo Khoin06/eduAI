@@ -22,6 +22,8 @@ export class LessonDetailComponent implements OnInit {
   userAnswers: string[] = []; // lưu đáp án người dùng chọn
   score: number | null = null; // điểm số
   submitted = false; // trạng thái đã nộp hay chưa
+  resultStatus: ("correct" | "wrong" | null)[] = [];
+
 
   isGeneratingQuiz = false; // trạng thái loading quiz AI
   quizError: string | null = null; // nếu lỗi AI
@@ -117,9 +119,13 @@ export class LessonDetailComponent implements OnInit {
 
     let correctCount = 0;
     this.aiData.quiz.forEach((q: any, i: number) => {
-      if (this.userAnswers[i] === q.answer) {
+    const user = this.userAnswers[i];
+    const isCorrect = user === q.answer;
+
+    if (this.userAnswers[i] === q.answer) {
         correctCount++;
       }
+          this.resultStatus[i] = isCorrect ? "correct" : "wrong";
     });
 
     this.score = correctCount;
