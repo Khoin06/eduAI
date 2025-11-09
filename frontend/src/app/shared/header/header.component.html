@@ -31,7 +31,7 @@
             <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white" href="#" role="button" data-bs-toggle="dropdown">
               <img [src]="currentUser?.avatar || '/assets/images/background.jpg'" 
                    alt="Avatar" class="rounded-circle" width="32" height="32">
-              <span>{{ currentUser?.fullName || 'User' }}</span>
+              <span>{{ currentUser?.username || 'User' }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow position-absolute">
               <li><a class="dropdown-item" routerLink="/profile" routerLinkActive="active"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
