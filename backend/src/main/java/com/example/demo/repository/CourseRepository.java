@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 
 import com.example.demo.model.Course;
+import com.example.demo.model.UserCourse;
 
 import java.util.List;
 
@@ -20,4 +21,11 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
         WHERE uc.user_id = :userId
         """, nativeQuery = true)
     List<Course> findCoursesByUserId(@Param("userId") Long userId);
+
+@Query("SELECT c FROM Course c WHERE c.id NOT IN " +
+       "(SELECT uc.courseId FROM UserCourse uc WHERE uc.userId = :userId)")
+List<Course> findCoursesNotSelectedByUser(Long userId);
+
+
+
 }

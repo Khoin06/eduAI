@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -28,12 +29,27 @@ public class CourseController {
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
+    @GetMapping("/unselected")
+public ResponseEntity<?> getUnselectedCourses(@RequestParam Long userId) {
+    try {
+        System.out.println("📩 Nhận request lấy khóa học chưa chọn, userId = " + userId);
+        var list = courseService.getUnselectedCourses(userId);
+        System.out.println("✅ Tìm thấy " + list.size() + " khóa học chưa chọn");
+        return ResponseEntity.ok(list);
+    } catch (Exception e) {
+        e.printStackTrace(); // In ra stacktrace để thấy lỗi thật
+        return ResponseEntity.badRequest().body(Map.of(
+            "error", e.getMessage()
+        ));
+    }
+}
     @GetMapping("/my-courses/{userId}")
     public List<Course> getMyCourses(@PathVariable Long userId) {
         List<Course> courses = courseService.getCoursesByUserId(userId);
         System.out.println(">>> UserID: " + userId + " - Courses found: " + courses.size());
         return courses;
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
@@ -51,6 +67,8 @@ public class CourseController {
             return ResponseEntity.status(500).body(null);
         }
     }
+
+
 
     @PostMapping
     public Course createCourse(@RequestBody Course course) {

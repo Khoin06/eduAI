@@ -76,14 +76,21 @@ export class CourseManagementComponent implements OnInit {
   /**
    * ✅ Lấy toàn bộ khóa học (dùng cho modal “Thêm khóa học”)
    */
-  loadAllCourses() {
-    this.http.get<any[]>('http://localhost:8080/api/courses').subscribe({
-      next: (data) => {
-        this.allCourses = data;
-      },
-      error: () => alert('Không thể tải danh sách khóa học chung!'),
-    });
-  }
+loadAllCourses() {
+  const url = `http://localhost:8080/api/courses/unselected?userId=${this.userId}`;
+  console.log('📡 Gọi API lấy khóa học chưa chọn:', url);
+
+  this.http.get<any[]>(url).subscribe({
+    next: (data) => {
+      this.allCourses = data;
+      console.log('✅ Khóa học chưa chọn:', this.allCourses);
+    },
+    error: (err) => {
+      console.error('❌ Lỗi loadAllCourses:', err);
+      alert('Không thể tải danh sách khóa học chưa chọn!');
+    },
+  });
+}
 
   /**
    * ✅ Mở modal thêm khóa học
@@ -120,7 +127,7 @@ export class CourseManagementComponent implements OnInit {
 
     console.log('📤 Gửi payload thêm khóa:', payload);
 
-    this.http.post('http://localhost:8080/api/courses/user-courses/batch', payload)
+    this.http.post('http://localhost:8080/api/user-courses/batch', payload)
       .subscribe({
         next: () => {
           this.loadUserCourses();

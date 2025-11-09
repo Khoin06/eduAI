@@ -45,4 +45,7 @@ public class CourseService {
     public void deleteCourse(Long id) {
         courseRepo.deleteById(id);
     }
+    public List<Course> getUnselectedCourses(Long userId) {
+        return courseRepo.findCoursesNotSelectedByUser(userId);
+    }
 }
