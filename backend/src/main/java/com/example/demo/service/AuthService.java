@@ -22,8 +22,9 @@ public class AuthService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        return jwtProvider.generateToken(user.getUsername());
+       return jwtProvider.generateToken(user.getUsername(), user.getRole());
     }
+
 
     // ĐĂNG NHẬP
     public String login(String username, String password) {
@@ -31,6 +32,7 @@ public class AuthService {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Sai tài khoản hoặc mật khẩu!");
         }
-        return jwtProvider.generateToken(username);
+       return jwtProvider.generateToken(username, user.getRole());
+
     }
 }
