@@ -3,7 +3,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { ChatDialogComponent } from '../../lesson-detail/chat-dialog/chat-dialog.component';
+import { ChatDialogComponent } from '../chat-dialog/chat-dialog.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({

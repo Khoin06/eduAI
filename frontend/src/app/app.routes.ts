@@ -24,7 +24,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./admin/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
      canActivate: [studentGuard],
   },
   {
@@ -36,7 +36,7 @@ export const routes: Routes = [
   {
     path: 'courses',
     loadComponent: () =>
-      import('./admin/course-manager/course-manager.component').then(
+      import('./pages/courses/course-manager/course-manager.component').then(
         (m) => m.CourseManagementComponent
       ),
   },
@@ -44,13 +44,7 @@ export const routes: Routes = [
   {
     path: 'course/:id',
     loadComponent: () =>
-      import('./course/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
-  },
-  {
-    path: 'admin/courses',
-    loadComponent: () =>
-      import('./course/course-list/course-list.component').then((m) => m.CourseListComponent),
-    //  canActivate: [adminGuard]
+      import('./pages/courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
   },
   {
     path: 'lesson/:id',
@@ -70,11 +64,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
     canActivate: [authGuard],
-  },
-  {
-    path: 'lesson/:id',
-    loadComponent: () =>
-      import('./lesson/lesson-viewer/lesson-viewer.component').then((m) => m.LessonViewerComponent),
   },
   {
     path: 'chat/:lessonId',
