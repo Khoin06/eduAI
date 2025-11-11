@@ -79,5 +79,8 @@ if (user != null) {
 
     return ResponseEntity.ok(response);
 }
-
+@GetMapping("/encode/{raw}")
+public String encode(@PathVariable String raw) {
+    return passwordEncoder.encode(raw);
+}
 }

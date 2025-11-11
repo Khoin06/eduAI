@@ -22,6 +22,7 @@ export class AuthService {
     // Lưu user vào localStorage với key thống nhất
     localStorage.setItem('current_user', JSON.stringify(userData));
     localStorage.setItem('token', token);
+    localStorage.setItem('role', userData.role);
     this.isLoggedInSubject.next(true);
   }
 
@@ -46,6 +47,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('current_user');
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     this.isLoggedInSubject.next(false);
   }
 
@@ -54,5 +56,9 @@ export class AuthService {
    */
   setLoggedIn(value: boolean) {
     this.isLoggedInSubject.next(value);
+  }
+
+  isAdmin(): boolean {
+    return localStorage.getItem('role') === 'ADMIN';
   }
 }

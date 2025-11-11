@@ -1,28 +1,31 @@
-<!-- src/app/shared/sidebar/sidebar.component.html -->
-<div class="sidebar bg-warning text-light vh-100 position-fixed start-0 top-0 pt-5" style="width: 260px; z-index: 1040;">
-  <div class="p-3">
+<div *ngIf="role === 'STUDENT'" class="sidebar bg-warning text-light vh-100 position-fixed">
+  <div class="ps-3">
     <h5 class="text-info fw-bold mb-4">EduAI</h5>
-    <ul class="nav nav-pills flex-column gap-1">
+    <ul class="nav nav-pills flex-column">
       <li class="nav-item">
-        <a routerLink="/dashboard" class="nav-link text-light sidebar-link" routerLinkActive="active-link " >
+        <a routerLink="/dashboard" class="nav-link text-light sidebar-link">
           <i class="fas fa-home me-2"></i> Trang chủ
         </a>
       </li>
+
       <li class="nav-item">
-        <a routerLink="/courses" class="nav-link text-light sidebar-link" routerLinkActive="active-link" >
+        <a routerLink="/courses" class="nav-link text-light sidebar-link">
           <i class="fas fa-book me-2"></i> Khóa học của tôi
         </a>
       </li>
+
       <li class="nav-item">
-        <a routerLink="/progress" class="nav-link text-light sidebar-link " routerLinkActive="active-link" >
+        <a routerLink="/progress" class="nav-link text-light sidebar-link">
           <i class="fas fa-chart-line me-2"></i> Tiến độ học
         </a>
       </li>
+
       <li class="nav-item">
-        <a routerLink="/certificates" class="nav-link text-light sidebar-link" routerLinkActive="active-link" >
+        <a routerLink="/certificates" class="nav-link text-light sidebar-link">
           <i class="fas fa-certificate me-2"></i> Chứng chỉ
         </a>
       </li>
+
       <li class="nav-item mt-4">
         <a routerLink="/settings" class="nav-link text-light sidebar-link">
           <i class="fas fa-cog me-2"></i> Cài đặt
@@ -31,5 +34,32 @@
     </ul>
   </div>
 </div>
+<div *ngIf="role === 'ADMIN'" class="sidebar bg-dark text-light vh-100 position-fixed">
+  <div class="ps-3">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item">
+        <a routerLink="/admin" class="nav-link text-light sidebar-link">
+          <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+        </a>
+      </li>
 
-<div class="sidebar-offset" [style.marginLeft.px]="260"></div>
+      <li class="nav-item">
+        <a routerLink="/admin/courses" class="nav-link text-light sidebar-link">
+          <i class="fas fa-book-open me-2"></i> Quản lý khóa học
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a routerLink="/admin/lessons" class="nav-link text-light sidebar-link">
+          <i class="fas fa-video me-2"></i> Quản lý bài học
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a routerLink="/admin/users" class="nav-link text-light sidebar-link">
+          <i class="fas fa-users me-2"></i> Quản lý người dùng
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

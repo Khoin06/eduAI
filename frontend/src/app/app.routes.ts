@@ -1,9 +1,11 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './interceptors/auth.guard';
+import { adminGuard } from './interceptors/admin.guard';
+import { studentGuard } from './interceptors/student.guard';
 
 export const routes: Routes = [
-    {
+  {
     path: '',
     redirectTo: '/login',
     // loadComponent: () =>
@@ -23,7 +25,13 @@ export const routes: Routes = [
     path: 'dashboard',
     loadComponent: () =>
       import('./admin/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-    canMatch: [authGuard]
+     canActivate: [studentGuard],
+  },
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./admin/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
     path: 'courses',
@@ -38,30 +46,31 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./course/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
   },
-  { path: 'admin/courses', 
+  {
+    path: 'admin/courses',
     loadComponent: () =>
       import('./course/course-list/course-list.component').then((m) => m.CourseListComponent),
-    //  canActivate: [adminGuard] 
-    },
-      {
+    //  canActivate: [adminGuard]
+  },
+  {
     path: 'lesson/:id',
     loadComponent: () =>
-      import('./pages/lesson-detail/lesson-detail.component').then(m => m.LessonDetailComponent)
+      import('./pages/lesson-detail/lesson-detail.component').then((m) => m.LessonDetailComponent),
   },
   {
     path: 'certificates',
-    loadComponent: () =>
-      import('./pages/certificates/certificates').then((m) => m.Certificates),
+    loadComponent: () => import('./pages/certificates/certificates').then((m) => m.Certificates),
   },
   {
     path: 'progress',
-    loadComponent: () =>
-      import('./pages/progress/progress').then((m) => m.Progress),
+    loadComponent: () => import('./pages/progress/progress').then((m) => m.Progress),
   },
-  { path: 'profile', 
+  {
+    path: 'profile',
     loadComponent: () =>
       import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
-    canActivate: [authGuard] },
+    canActivate: [authGuard],
+  },
   {
     path: 'lesson/:id',
     loadComponent: () =>

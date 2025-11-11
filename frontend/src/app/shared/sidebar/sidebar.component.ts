@@ -10,4 +10,11 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+    role = localStorage.getItem('role');
+
+  ngOnInit() {
+    // Cập nhật khi reload
+    this.role = localStorage.getItem('role');
+  }
+}

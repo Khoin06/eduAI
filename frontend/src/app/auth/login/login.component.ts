@@ -12,38 +12,49 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   username = '';
   password = '';
   isLoading = false;
-  constructor(private http: HttpClient,private app: AppComponent,private authService: AuthService,private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private app: AppComponent,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-login() {
-this.isLoading = true;
+  login() {
+    this.isLoading = true;
 
-  this.http.post<any>('http://localhost:8080/api/auth/login', {
-    username: this.username,
-    password: this.password
-  }).subscribe({
-    next: (res) => {
-      console.log('Login response:', res);
+    this.http
+      .post<any>('http://localhost:8080/api/auth/login', {
+        username: this.username,
+        password: this.password,
+      })
+      .subscribe({
+        next: (res) => {
+          console.log('Login response:', res);
 
-      // LẤY userId, username, token
-      const userData = { id: res.id, username: res.username };
-      const token = res.token; // Backend phải trả token
+          // LẤY userId, username, token
+          const userData = { id: res.id, username: res.username, role: res.role };
+          const token = res.token; // Backend phải trả token
 
-      // LƯU QUA AuthService
-      this.authService.login(userData, token);
+          // LƯU QUA AuthService
+          this.authService.login(userData, token);
 
-      // CHUYỂN HƯỚNG
-      this.router.navigate(['/dashboard']);
-    },
-    error: () => {
-      alert('Đăng nhập thất bại!');
-      this.isLoading = false;
-    }
-  });
-}
+          // CHUYỂN HƯỚNG
+          if (res.role === 'ADMIN') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+        },
+        error: () => {
+          alert('Đăng nhập thất bại!');
+          this.isLoading = false;
+        },
+      });
+  }
 }
