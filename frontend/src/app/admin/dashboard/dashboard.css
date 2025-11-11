@@ -1,8 +1,7 @@
 .dashboard-container {
   max-width: 1100px;         /* tự thu nhỏ content */
-  margin: 0 auto;            /* căn giữa */
+  margin: auto;            /* căn giữa */
   padding: 20px;
-  margin-left: 260px;
 }
 
 .title {

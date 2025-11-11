@@ -39,12 +39,16 @@ export const routes: Routes = [
       import('./pages/courses/course-manager/course-manager.component').then(
         (m) => m.CourseManagementComponent
       ),
+           canActivate: [studentGuard],
+
   },
 
   {
     path: 'course/:id',
     loadComponent: () =>
       import('./pages/courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
+         canActivate: [studentGuard],
+
   },
   {
     path: 'lesson/:id',
