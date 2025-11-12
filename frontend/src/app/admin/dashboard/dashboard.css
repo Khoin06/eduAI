@@ -1,6 +1,6 @@
 .dashboard-container {
   max-width: 1100px;         /* tự thu nhỏ content */
-  margin: auto;            /* căn giữa */
+  margin:0 auto;            /* căn giữa */
   padding: 20px;
 }
 

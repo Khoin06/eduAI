@@ -40,7 +40,14 @@ export const routes: Routes = [
         (m) => m.CourseManagementComponent
       ),
            canActivate: [studentGuard],
-
+  },
+    {
+    path: 'admin/courses',
+    loadComponent: () =>
+      import('./admin/courses/courses').then(
+        (m) => m.Courses
+      ),
+       canActivate: [adminGuard],
   },
 
   {
@@ -49,6 +56,11 @@ export const routes: Routes = [
       import('./pages/courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
          canActivate: [studentGuard],
 
+  },
+  { path: 'admin/course/:id',
+    loadComponent: () =>
+      import('./admin/course-detail/course-detail').then((m) => m.CourseDetail),
+canActivate: [adminGuard],
   },
   {
     path: 'lesson/:id',

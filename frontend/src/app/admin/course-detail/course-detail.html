@@ -1,0 +1,106 @@
+<!-- HIỂN THỊ TRẠNG THÁI ĐANG LOAD -->
+<div *ngIf="isLoading" class="text-center text-muted py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-3">Đang tải dữ liệu khóa học...</p>
+</div>
+
+<!-- KHI CÓ DỮ LIỆU -->
+<div class="container py-5" *ngIf="!isLoading && (course || (lessons && lessons.length > 0))">
+
+  <!-- TIÊU ĐỀ KHÓA HỌC -->
+  <h1 class="fw-bold mb-2">{{ course?.title }}</h1>
+  <p class="text-muted mb-4">{{ course?.description }}</p>
+
+  <h4 class="fw-semibold mb-3">Nội dung khóa học ({{ lessons.length }} bài)</h4>
+
+  <!-- DANH SÁCH BÀI HỌC THEO DỌC -->
+  <ul class="list-group list-group-flush shadow-sm border rounded">
+    <li *ngFor="let lesson of lessons; let i = index" class="list-group-item py-3">
+
+      <!-- 🔹 Chế độ XEM -->
+      <div *ngIf="editingLesson?.id !== lesson.id" class="d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ i + 1 }}. {{ lesson.title }}</strong>
+          <small class="text-muted d-block">{{ lesson.duration }} phút</small>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-outline-primary btn-sm rounded-pill" (click)="goToLessonDetail(lesson.id)">Xem</button>
+          <button class="btn btn-outline-warning btn-sm" (click)="editLesson(lesson)">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-outline-danger btn-sm" (click)="deleteLesson(lesson.id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 🔹 Chế độ SỬA -->
+      <div *ngIf="editingLesson?.id === lesson.id" class="d-flex flex-column gap-2">
+
+        <div class="d-flex gap-3 align-items-center">
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="editingLesson.title"
+            placeholder="Tiêu đề bài học" />
+
+          <input type="number" class="form-control form-control-sm" [(ngModel)]="editingLesson.duration"
+            placeholder="Thời lượng (phút)" />
+        </div>
+
+        <div class="mt-2 d-flex justify-content-end gap-2">
+          <button class="btn btn-success btn-sm" (click)="saveLesson()">
+            ✅ Lưu
+          </button>
+          <button class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+            ❌ Hủy
+          </button>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+
+  <!-- ✅ NÚT THÊM BÀI HỌC (chỉ hiện 1 lần ở cuối danh sách) -->
+  <div class="text-center mt-4">
+    <button class="btn btn-primary" (click)="openAddLesson()">
+      <i class="fas fa-plus"></i> Thêm bài học
+    </button>
+  </div>
+
+  <!-- ✅ FORM THÊM BÀI HỌC -->
+  <div *ngIf="showAddForm" class="card mt-3 shadow-sm border-0">
+    <div class="card-body">
+      <h5 class="fw-bold mb-3 text-primary">Thêm bài học mới</h5>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <input class="form-control" placeholder="Tiêu đề bài học" [(ngModel)]="newLesson.title">
+        </div>
+        <div class="col-md-6">
+          <input type="number" class="form-control" placeholder="Thời lượng (phút)" [(ngModel)]="newLesson.duration">
+        </div>
+        <div class="col-12">
+          <input class="form-control" placeholder="Video URL" [(ngModel)]="newLesson.videoUrl">
+        </div>
+        <div class="col-12">
+          <textarea class="form-control" rows="3" placeholder="Mô tả bài học"
+            [(ngModel)]="newLesson.description"></textarea>
+        </div>
+      </div>
+
+      <div class="mt-3 d-flex justify-content-end gap-2">
+        <button class="btn btn-success" (click)="addLesson()">
+          <i class="fas fa-save"></i> Lưu
+        </button>
+        <button class="btn btn-secondary" (click)="showAddForm = false">
+          <i class="fas fa-times"></i> Hủy
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- KHI KHÔNG CÓ DỮ LIỆU -->
+<div *ngIf="!isLoading && lessons.length === 0" class="text-center text-muted py-5">
+  Không có bài học nào trong khóa học này.
+</div>

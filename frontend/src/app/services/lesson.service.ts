@@ -17,4 +17,16 @@ export class LessonService {
   getByCourse(courseId: number) {
     return this.http.get<any[]>(`${this.api}/course/${courseId}`);
   }
+  createLesson(lesson: any) {
+  return this.http.post(`${this.api}`, lesson);
+}
+
+updateLesson(id: number, lesson: any) {
+  return this.http.put(`${this.api}/${id}`, lesson);
+}
+
+deleteLesson(id: number) {
+  return this.http.delete(`${this.api}/${id}`);
+}
+
 }
