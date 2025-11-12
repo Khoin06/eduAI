@@ -1,39 +1,89 @@
 <div class="container mt-4">
-  <h3 class="mb-3">👥 Danh sách người dùng</h3>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Danh sách người dùng</h3>
+    <button
+      *ngIf="!isAdding"
+      class="btn btn-success btn-sm"
+      (click)="startAddUser()"
+    >
+      <i class="fas fa-plus"></i> Thêm mới
+    </button>
+  </div>
 
-  <div *ngIf="loading" class="text-center">
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center mt-3">
     <div class="spinner-border text-primary"></div>
   </div>
 
-  <table *ngIf="!loading" class="table table-striped table-bordered">
+  <!-- Table -->
+  <table *ngIf="!loading" class="table table-bordered table-striped align-middle">
     <thead class="table-dark">
       <tr>
         <th>ID</th>
         <th>Tên đăng nhập</th>
         <th>Email</th>
         <th>Quyền</th>
-        <th>Thao tác</th>
+        <th class="text-center">Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users" >
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
+      <!-- Dòng dữ liệu -->
+      <ng-container *ngFor="let user of users">
+        <tr *ngIf="user.role === 'STUDENT'">
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge bg-info">{{ user.role }}</span>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+              <i class="fas fa-trash"></i> Xóa
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+
+      <!-- Dòng thêm mới -->
+      <tr *ngIf="isAdding">
+        <td>—</td>
         <td>
-          <span
-            class="badge"
-            [ngClass]="{
-              'bg-success': user.role === 'ADMIN',
-              'bg-info': user.role === 'STUDENT'
-            }"
-          >
-            {{ user.role }}
-          </span>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [(ngModel)]="newUser.username"
+            placeholder="Tên đăng nhập"
+          />
         </td>
         <td>
-          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
-            <i class="fas fa-trash"></i> Xóa
+          <input
+            type="email"
+            class="form-control form-control-sm"
+            [(ngModel)]="newUser.email"
+            placeholder="Email"
+          />
+            <input
+    type="password"
+    class="form-control form-control-sm"
+    [(ngModel)]="newUser.password"
+    placeholder="Mật khẩu"
+  />
+        </td>
+        <td>
+          <select
+            class="form-select form-select-sm"
+            [(ngModel)]="newUser.role"
+          >
+            <option value="STUDENT">STUDENT</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-success me-2" (click)="saveNewUser()">
+            <i class="fas fa-save"></i> Lưu
+          </button>
+          <button class="btn btn-sm btn-secondary" (click)="cancelAdd()">
+            <i class="fas fa-times"></i> Hủy
           </button>
         </td>
       </tr>

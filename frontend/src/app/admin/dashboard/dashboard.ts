@@ -6,32 +6,31 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-    standalone: true,
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css']
+  styleUrls: ['./dashboard.css'],
 })
 export class Dashboard implements OnInit {
-
   courses: any[] = [];
   totalCourses = 0;
   totalLessons = 0;
   totalUsers = 0;
+  users: any[] = [];
 
   // ✅ Biến CRUD
   editingCourse: any = null;
   newCourse = { title: '', description: '' };
 
-
   lessons: any[] = [];
   editingLesson: any = null;
-newLesson = { title: '', content: '', duration: 0, courseId: 1 };
+  newLesson = { title: '', content: '', duration: 0, courseId: 1 };
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.loadCourses();
-    this.totalLessons = 120; 
-    this.totalUsers = 45;    
+    this.totalLessons = 120;
+    this.loadUsers();
   }
 
   loadCourses() {
@@ -40,7 +39,15 @@ newLesson = { title: '', content: '', duration: 0, courseId: 1 };
         this.courses = res;
         this.totalCourses = res.length;
       },
-      error: () => alert('Không tải được danh sách khóa học')
+      error: () => alert('Không tải được danh sách khóa học'),
+    });
+  }
+  loadUsers() {
+    this.http.get<any[]>('http://localhost:8080/api/users').subscribe({
+      next: (data) => {
+        this.users = data.filter((u) => u.role === 'STUDENT');
+        this.totalUsers = this.users.length;
+      },
     });
   }
 
@@ -50,7 +57,7 @@ newLesson = { title: '', content: '', duration: 0, courseId: 1 };
 
     this.http.delete(`http://localhost:8080/api/courses/${id}`).subscribe({
       next: () => this.loadCourses(),
-      error: () => alert('Xóa thất bại!')
+      error: () => alert('Xóa thất bại!'),
     });
   }
 
@@ -61,16 +68,15 @@ newLesson = { title: '', content: '', duration: 0, courseId: 1 };
 
   // ✅ Lưu cập nhật
   saveCourse() {
-    this.http.put(
-      `http://localhost:8080/api/courses/${this.editingCourse.id}`,
-      this.editingCourse
-    ).subscribe({
-      next: () => {
-        this.editingCourse = null;
-        this.loadCourses();
-      },
-      error: () => alert('Cập nhật thất bại!')
-    });
+    this.http
+      .put(`http://localhost:8080/api/courses/${this.editingCourse.id}`, this.editingCourse)
+      .subscribe({
+        next: () => {
+          this.editingCourse = null;
+          this.loadCourses();
+        },
+        error: () => alert('Cập nhật thất bại!'),
+      });
   }
 
   cancelEdit() {
@@ -84,13 +90,12 @@ newLesson = { title: '', content: '', duration: 0, courseId: 1 };
       return;
     }
 
-    this.http.post('http://localhost:8080/api/admin/courses', this.newCourse)
-      .subscribe({
-        next: () => {
-          this.newCourse = { title: '', description: '' };
-          this.loadCourses();
-        },
-        error: () => alert('Thêm khóa học thất bại!')
-      });
+    this.http.post('http://localhost:8080/api/admin/courses', this.newCourse).subscribe({
+      next: () => {
+        this.newCourse = { title: '', description: '' };
+        this.loadCourses();
+      },
+      error: () => alert('Thêm khóa học thất bại!'),
+    });
   }
 }
