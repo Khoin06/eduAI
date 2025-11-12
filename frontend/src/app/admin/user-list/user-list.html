@@ -1,1 +1,42 @@
-<p>user-list works!</p>
+<div class="container mt-4">
+  <h3 class="mb-3">👥 Danh sách người dùng</h3>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <table *ngIf="!loading" class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Tên đăng nhập</th>
+        <th>Email</th>
+        <th>Quyền</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users" >
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': user.role === 'ADMIN',
+              'bg-info': user.role === 'STUDENT'
+            }"
+          >
+            {{ user.role }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+            <i class="fas fa-trash"></i> Xóa
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

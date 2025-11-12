@@ -3,6 +3,8 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,6 +14,7 @@ public class User {
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;
+
 
     @Column(nullable = false, length = 255)
     private String password;

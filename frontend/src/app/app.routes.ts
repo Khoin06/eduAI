@@ -25,13 +25,12 @@ export const routes: Routes = [
     path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-     canActivate: [studentGuard],
+    canActivate: [studentGuard],
   },
   {
     path: 'admin',
     canActivate: [adminGuard],
-    loadComponent: () =>
-      import('./admin/dashboard/dashboard').then((c) => c.Dashboard),
+    loadComponent: () => import('./admin/dashboard/dashboard').then((c) => c.Dashboard),
   },
   {
     path: 'courses',
@@ -39,42 +38,42 @@ export const routes: Routes = [
       import('./pages/courses/course-manager/course-manager.component').then(
         (m) => m.CourseManagementComponent
       ),
-           canActivate: [studentGuard],
+    canActivate: [studentGuard],
   },
-    {
+  {
     path: 'admin/courses',
-    loadComponent: () =>
-      import('./admin/courses/courses').then(
-        (m) => m.Courses
-      ),
-       canActivate: [adminGuard],
+    loadComponent: () => import('./admin/courses/courses').then((m) => m.Courses),
+    canActivate: [adminGuard],
   },
 
   {
     path: 'course/:id',
     loadComponent: () =>
-      import('./pages/courses/course-detail/course-detail.component').then((m) => m.CourseDetailComponent),
-         canActivate: [studentGuard],
-
+      import('./pages/courses/course-detail/course-detail.component').then(
+        (m) => m.CourseDetailComponent
+      ),
+    canActivate: [studentGuard],
   },
-  { path: 'admin/course/:id',
-    loadComponent: () =>
-      import('./admin/course-detail/course-detail').then((m) => m.CourseDetail),
-canActivate: [adminGuard],
+  {
+    path: 'admin/course/:id',
+    loadComponent: () => import('./admin/course-detail/course-detail').then((m) => m.CourseDetail),
+    canActivate: [adminGuard],
   },
   {
     path: 'lesson/:id',
     loadComponent: () =>
       import('./pages/lesson-detail/lesson-detail.component').then((m) => m.LessonDetailComponent),
-         canActivate: [studentGuard],
-
+    canActivate: [studentGuard],
+  },
+  {
+    path: 'admin/lesson/:id',
+    loadComponent: () => import('./admin/lesson-detail/lesson-detail').then((m) => m.LessonDetail),
+    canActivate: [adminGuard],
   },
     {
-    path: 'admin/lesson/:id',
+    path: 'admin/user-list',
     loadComponent: () =>
-      import('./admin/lesson-detail/lesson-detail').then(
-        (m) => m.LessonDetail
-      ),
+      import('./admin/user-list/user-list').then((m) => m.UserList),
     canActivate: [adminGuard],
   },
   {
@@ -90,11 +89,6 @@ canActivate: [adminGuard],
     loadComponent: () =>
       import('./pages/profile/profile.component').then((m) => m.ProfileComponent),
     canActivate: [authGuard],
-  },
-  {
-    path: 'chat/:lessonId',
-    loadComponent: () =>
-      import('./chat/chat-box/chat-box.component').then((m) => m.ChatBoxComponent),
   },
   { path: '**', redirectTo: '/login' },
 ];
