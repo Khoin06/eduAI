@@ -1,34 +1,139 @@
 <h3 class="fw-bold mb-3">Danh sách khóa học</h3>
 
+<!-- ✅ Danh sách khóa học -->
 <div class="row g-4">
   <div class="col-md-6 col-lg-4" *ngFor="let c of courses">
-
-    <div class="course-card bg-white rounded-4 shadow-sm overflow-hidden border cursor-pointer  h-100" (click)="goToDetail(c.id)">
-
-      <img [src]="c.imageUrl || '/assets/images/course-default.jpg'"
-           class="w-100"
-           style="height: 160px; object-fit: cover;">
+    <div
+      class="course-card bg-white rounded-4 shadow-sm overflow-hidden border cursor-pointer h-100"
+      (click)="goToDetail(c.id)"
+    >
+      <img
+        [src]="c.imageUrl || '/assets/images/course-default.jpg'"
+        class="w-100"
+        style="height: 160px; object-fit: cover"
+      />
 
       <div class="p-3">
         <h5 class="fw-semibold mb-1">{{ c.title }}</h5>
-
         <p class="text-muted small mb-2">{{ c.description }}</p>
 
         <div class="d-flex justify-content-between mt-3">
-          <button class="btn btn-warning btn-sm" (click)="editCourse(c)">
+          <!-- Nút sửa -->
+          <button
+            class="btn btn-warning btn-sm"
+            title="Sửa khóa học"
+            (click)="editCourse(c, $event)"
+          >
             <i class="fas fa-edit"></i>
           </button>
 
-          <button class="btn btn-danger btn-sm" (click)="deleteCourse(c.id)">
+          <!-- Nút xóa -->
+          <button
+            class="btn btn-danger btn-sm"
+            title="Xóa khóa học"
+            (click)="confirmDelete(c.id, $event)"
+          >
             <i class="fas fa-trash"></i>
           </button>
         </div>
       </div>
     </div>
+  </div>
 
+  <!-- ✅ Form thêm mới nằm cuối danh sách -->
+  <div class="col-md-6 col-lg-4">
+    <div class="bg-light rounded-4 shadow-sm border p-3 h-100">
+      <h5 class="fw-bold mb-3">➕ Thêm khóa học mới</h5>
+
+      <div class="mb-2">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tiêu đề"
+          [(ngModel)]="newCourse.title"
+        />
+      </div>
+
+      <div class="mb-2">
+        <textarea
+          class="form-control"
+          placeholder="Mô tả"
+          rows="2"
+          [(ngModel)]="newCourse.description"
+        ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ảnh (URL)"
+          [(ngModel)]="newCourse.imageUrl"
+        />
+      </div>
+
+      <button class="btn btn-primary w-100" (click)="addCourse()">Thêm</button>
+    </div>
   </div>
 </div>
 
 <div class="text-center py-5" *ngIf="courses.length === 0">
   <p class="text-muted">Chưa có khóa học nào.</p>
+</div>
+
+<!-- ✅ Modal sửa khóa học -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  #editCourseModal
+  aria-labelledby="editCourseModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="editCourseModalLabel">✏️ Chỉnh sửa khóa học</h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="cancelEdit()"
+        ></button>
+      </div>
+
+      <div class="modal-body" *ngIf="editingCourse">
+        <div class="mb-3">
+          <label class="form-label">Tiêu đề</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="editingCourse.title"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mô tả</label>
+          <textarea
+            class="form-control"
+            rows="3"
+            [(ngModel)]="editingCourse.description"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Ảnh minh họa (URL)</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="editingCourse.imageUrl"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cancelEdit()">Hủy</button>
+        <button class="btn btn-success" (click)="saveCourse()">Lưu</button>
+      </div>
+    </div>
+  </div>
 </div>

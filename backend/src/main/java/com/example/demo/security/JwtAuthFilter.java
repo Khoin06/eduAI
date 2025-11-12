@@ -28,45 +28,48 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     UserRepository userRepo;
 
-@Override
-protected void doFilterInternal(HttpServletRequest request,
-                                HttpServletResponse response,
-                                FilterChain filterChain)
-        throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
 
-    String path = request.getRequestURI();
+        String path = request.getRequestURI();
 
-    // ✅ Skip login/register
-    if (path.startsWith("/api/auth")) {
-        filterChain.doFilter(request, response);
-        return;
-    }
+        if (path.startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-    String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String username = jwtProvider.getUsername(token);
 
-        String token = authHeader.substring(7);
-        String username = jwtProvider.getUsername(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // ✅ Lấy user từ DB
+                String role = jwtProvider.getRole(token); // ✅ Đọc role trực tiếp từ token
 
-            // ✅ Lấy user từ DB — không dùng UserDetailsService
-            User user = userRepo.findByUsername(username);
+                if (role != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
+                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            username, // principal
                             null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                            authorities // quyền
                     );
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("✅ Authenticated as " + username + " with ROLE_" + role);
+                }
+
+            }
         }
+
+        filterChain.doFilter(request, response);
     }
 
-    filterChain.doFilter(request, response);
 }
-
-}
-

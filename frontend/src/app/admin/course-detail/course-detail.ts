@@ -20,6 +20,8 @@ export class CourseDetail {
 
   showAddForm = false;
 newLesson: any = { title: '', description: '', duration: '', videoUrl: '', courseId: 0 };
+
+editingCourse = false;
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {
     
   }
@@ -101,6 +103,33 @@ addLesson() {
 }
   goToLessonDetail(lessonId: number) {
     console.log('➡️ Chuyển tới bài học ID:', lessonId);
-    this.router.navigate(['/lesson', lessonId]);
+    this.router.navigate([`/admin/lesson/${lessonId}`]);
   }
+  // Bật chế độ chỉnh sửa
+editCourse() {
+  this.editingCourse = true;
+}
+
+// Hủy chỉnh sửa
+cancelEditCourse() {
+  this.editingCourse = false;
+  this.loadCourse(); // tải lại dữ liệu cũ
+}
+
+// Lưu thay đổi (PUT API)
+saveCourse() {
+  const token = localStorage.getItem('token');
+  this.http.put(`http://localhost:8080/api/courses/${this.courseId}`, this.course, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).subscribe({
+    next: () => {
+      alert('Cập nhật khóa học thành công!');
+      this.editingCourse = false;
+    },
+    error: err => {
+      console.error('❌ Lỗi cập nhật khóa học:', err);
+      alert('Không thể cập nhật khóa học.');
+    }
+  });
+}
 }

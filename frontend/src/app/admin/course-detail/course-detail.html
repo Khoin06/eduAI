@@ -7,9 +7,39 @@
 <!-- KHI CÓ DỮ LIỆU -->
 <div class="container py-5" *ngIf="!isLoading && (course || (lessons && lessons.length > 0))">
 
-  <!-- TIÊU ĐỀ KHÓA HỌC -->
-  <h1 class="fw-bold mb-2">{{ course?.title }}</h1>
-  <p class="text-muted mb-4">{{ course?.description }}</p>
+<!-- TIÊU ĐỀ KHÓA HỌC -->
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div class="flex-grow-1">
+    <!-- Nếu không trong chế độ sửa -->
+    <h1 *ngIf="!editingCourse" class="fw-bold mb-1">{{ course?.title }}</h1>
+    <p *ngIf="!editingCourse" class="text-muted mb-2">{{ course?.description }}</p>
+
+    <!-- Nếu đang sửa -->
+    <div *ngIf="editingCourse" class="mb-3">
+      <input class="form-control mb-2" [(ngModel)]="course.title" placeholder="Nhập tên khóa học">
+      <textarea class="form-control" rows="2" [(ngModel)]="course.description" placeholder="Nhập mô tả khóa học"></textarea>
+    </div>
+  </div>
+
+  <!-- Nút thao tác -->
+  <div class="ms-3">
+    <!-- Chưa sửa -->
+    <button *ngIf="!editingCourse" class="btn btn-outline-warning btn-sm" (click)="editCourse()">
+      <i class="fas fa-edit"></i> Sửa
+    </button>
+
+    <!-- Đang sửa -->
+    <div *ngIf="editingCourse" class="d-flex gap-2">
+      <button class="btn btn-success btn-sm" (click)="saveCourse()">
+        <i class="fas fa-save"></i> Lưu
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="cancelEditCourse()">
+        <i class="fas fa-times"></i> Hủy
+      </button>
+    </div>
+  </div>
+</div>
+
 
   <h4 class="fw-semibold mb-3">Nội dung khóa học ({{ lessons.length }} bài)</h4>
 

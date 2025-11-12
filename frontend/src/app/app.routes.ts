@@ -66,6 +66,16 @@ canActivate: [adminGuard],
     path: 'lesson/:id',
     loadComponent: () =>
       import('./pages/lesson-detail/lesson-detail.component').then((m) => m.LessonDetailComponent),
+         canActivate: [studentGuard],
+
+  },
+    {
+    path: 'admin/lesson/:id',
+    loadComponent: () =>
+      import('./admin/lesson-detail/lesson-detail').then(
+        (m) => m.LessonDetail
+      ),
+    canActivate: [adminGuard],
   },
   {
     path: 'certificates',

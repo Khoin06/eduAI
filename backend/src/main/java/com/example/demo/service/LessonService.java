@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-
 import com.example.demo.model.Lesson;
 import com.example.demo.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,8 @@ public class LessonService {
     public Lesson findById(Long id) {
         return lessonRepository.findById(id).orElse(null);
     }
-      // Tạo bài học mới
+
+    // Tạo bài học mới
     public Lesson saveLesson(Lesson lesson) {
         return lessonRepository.save(lesson);
     }
@@ -36,7 +36,8 @@ public class LessonService {
             lesson.setDuration(updatedLesson.getDuration());
             lesson.setVideoUrl(updatedLesson.getVideoUrl());
             lesson.setOrderIndex(updatedLesson.getOrderIndex());
-            lesson.setCourseId(updatedLesson.getCourseId());
+            if (updatedLesson.getCourseId() != null)
+                lesson.setCourseId(updatedLesson.getCourseId());
             return lessonRepository.save(lesson);
         }
         return null;

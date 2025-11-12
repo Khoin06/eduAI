@@ -31,4 +31,7 @@ public class UserCourseService {
                 })
                 .orElse(false);
     }
+        public void deleteByCourseId(Long courseId) {
+        userCourseRepository.deleteByCourseId(courseId);
+    }
 }
