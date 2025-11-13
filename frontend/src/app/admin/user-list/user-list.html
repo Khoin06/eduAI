@@ -1,11 +1,7 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="mb-0">Danh sách người dùng</h3>
-    <button
-      *ngIf="!isAdding"
-      class="btn btn-success btn-sm"
-      (click)="startAddUser()"
-    >
+    <button *ngIf="!isAdding" class="btn btn-success btn-sm" (click)="startAddUser()">
       <i class="fas fa-plus"></i> Thêm mới
     </button>
   </div>
@@ -17,7 +13,7 @@
 
   <!-- Table -->
   <table *ngIf="!loading" class="table table-bordered table-striped align-middle">
-    <thead class="table-dark">
+    <thead class="table-dark table-hover">
       <tr>
         <th>ID</th>
         <th>Tên đăng nhập</th>
@@ -29,7 +25,7 @@
     <tbody>
       <!-- Dòng dữ liệu -->
       <ng-container *ngFor="let user of users">
-        <tr *ngIf="user.role === 'STUDENT'">
+        <tr *ngIf="user.role === 'STUDENT'" (click)="openUserCourses(user)" class="cursor-pointer">
           <td>{{ user.id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
@@ -37,7 +33,7 @@
             <span class="badge bg-info">{{ user.role }}</span>
           </td>
           <td class="text-center">
-            <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
+            <button type="button" class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">
               <i class="fas fa-trash"></i> Xóa
             </button>
           </td>
@@ -62,31 +58,92 @@
             [(ngModel)]="newUser.email"
             placeholder="Email"
           />
-            <input
-    type="password"
-    class="form-control form-control-sm"
-    [(ngModel)]="newUser.password"
-    placeholder="Mật khẩu"
-  />
+          <input
+            type="password"
+            class="form-control form-control-sm"
+            [(ngModel)]="newUser.password"
+            placeholder="Mật khẩu"
+          />
         </td>
         <td>
-          <select
-            class="form-select form-select-sm"
-            [(ngModel)]="newUser.role"
-          >
+          <select class="form-select form-select-sm" [(ngModel)]="newUser.role">
             <option value="STUDENT">STUDENT</option>
             <option value="ADMIN">ADMIN</option>
           </select>
         </td>
         <td class="text-center">
-          <button class="btn btn-sm btn-success me-2" (click)="saveNewUser()">
+          <button type="button" class="btn btn-sm btn-success me-2" (click)="saveNewUser()">
             <i class="fas fa-save"></i> Lưu
           </button>
-          <button class="btn btn-sm btn-secondary" (click)="cancelAdd()">
+          <button type="button" class="btn btn-sm btn-secondary" (click)="cancelAdd()">
             <i class="fas fa-times"></i> Hủy
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+<!-- ========== MODAL ========== -->
+<div class="modal fade" id="userCoursesModal" #userModal tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Khóa học của <strong>{{ selectedUser?.username }}</strong>
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- DANH SÁCH KHÓA HỌC -->
+        <div *ngIf="userCourses.length > 0">
+          <ul class="list-group mb-3">
+            <li *ngFor="let c of userCourses" class="list-group-item d-flex justify-content-between align-items-center">
+              
+              <div>
+                <strong>{{ c.title }}</strong>
+                <p class="text-muted small mb-0">Tiến độ: {{ c.progress || 0 }}%</p>
+              </div>
+
+              <button type="button" class="btn btn-danger btn-sm" (click)="unenrollCourse(c.id)">
+                <i class="fas fa-times"></i> Gỡ bỏ
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <p *ngIf="userCourses.length === 0" class="text-muted">
+          Người dùng này chưa đăng ký khóa học nào.
+        </p>
+
+        <!-- ================= THÊM KHÓA HỌC ================= -->
+        <div class="card p-3">
+          <h6 class="fw-bold mb-2">Thêm khóa học</h6>
+
+          <div class="d-flex gap-2">
+            <select class="form-select" [(ngModel)]="selectedCourseId">
+              <option value="" disabled selected>Chọn khóa học</option>
+              <option *ngFor="let c of unselectedCourses" [value]="c.id">
+                {{ c.title }}
+              </option>
+            </select>
+
+            <button type="button" class="btn btn-primary" (click)="enrollCourse()">
+              <i class="fas fa-plus"></i> Ghi danh
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+<button type="button" class="btn btn-secondary" (click)="closeModal()">Đóng</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 </div>

@@ -30,4 +30,10 @@ public class UserCourseController {
         userCourseService.remove(userId, courseId);
         return ResponseEntity.ok(Map.of("message", "Đã xóa khóa học khỏi danh sách!"));
     }
+
+    @PostMapping
+    public ResponseEntity<?> enroll(@RequestBody UserCourse uc) {
+        userCourseService.add(uc.getUserId(), uc.getCourseId());
+        return ResponseEntity.ok(Map.of("message", "Ghi danh thành công!"));
+    }
 }

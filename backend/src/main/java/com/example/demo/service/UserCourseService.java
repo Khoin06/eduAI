@@ -31,7 +31,17 @@ public class UserCourseService {
                 })
                 .orElse(false);
     }
-        public void deleteByCourseId(Long courseId) {
+
+    public void deleteByCourseId(Long courseId) {
         userCourseRepository.deleteByCourseId(courseId);
     }
+
+    public void add(Long userId, Long courseId) {
+        UserCourse uc = new UserCourse();
+        uc.setUserId(userId);
+        uc.setCourseId(courseId);
+        uc.setProgress(0);
+        userCourseRepository.save(uc);
+    }
+
 }
