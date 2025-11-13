@@ -10,7 +10,13 @@
   <div *ngIf="loading" class="text-center mt-3">
     <div class="spinner-border text-primary"></div>
   </div>
-
+<!-- THANH TÌM KIẾM -->
+<div class="input-group w-50 mb-3">
+  <span class="input-group-text bg-white">
+    <i class="fas fa-search"></i>
+  </span>
+  <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Tìm kiếm người dùng...">
+</div>
   <!-- Table -->
   <table *ngIf="!loading" class="table table-bordered table-striped align-middle">
     <thead class="table-dark table-hover">
@@ -24,7 +30,7 @@
     </thead>
     <tbody>
       <!-- Dòng dữ liệu -->
-      <ng-container *ngFor="let user of users">
+      <ng-container *ngFor="let user of filteredUsers()">
         <tr *ngIf="user.role === 'STUDENT'" (click)="openUserCourses(user)" class="cursor-pointer">
           <td>{{ user.id }}</td>
           <td>{{ user.username }}</td>

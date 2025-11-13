@@ -21,6 +21,7 @@ export class UserList implements OnInit {
 
   selectedUser: any = null;
   selectedCourseId: number | null = null;
+  searchTerm: string = "";
 @ViewChild('userModal') userModal!: ElementRef;
 modalInstance: any;
 
@@ -142,4 +143,16 @@ closeModal() {
       error: err => console.error("Lỗi gỡ khóa học:", err)
     });
   }
+filteredUsers() {
+  if (!this.searchTerm) return this.users;
+
+  const term = this.searchTerm.toLowerCase();
+
+  return this.users.filter(user =>
+    user.username.toLowerCase().includes(term) ||
+    (user.email && user.email.toLowerCase().includes(term)) ||
+    user.id.toString().includes(term)
+  );
 }
+}
+
