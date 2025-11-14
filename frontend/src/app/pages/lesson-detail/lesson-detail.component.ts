@@ -24,12 +24,17 @@ export class LessonDetailComponent implements OnInit {
   userAnswers: string[] = []; // lưu đáp án người dùng chọn
   score: number | null = null; // điểm số
   submitted = false; // trạng thái đã nộp hay chưa
-  resultStatus: ("correct" | "wrong" | null)[] = [];
-
+  resultStatus: ('correct' | 'wrong' | null)[] = [];
 
   isGeneratingQuiz = false; // trạng thái loading quiz AI
   quizError: string | null = null; // nếu lỗi AI
-  constructor(private route: ActivatedRoute, private http: HttpClient, private dialog: MatDialog, private router: Router,private api: LessonService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private dialog: MatDialog,
+    private router: Router,
+    private api: LessonService
+  ) {}
 
   ngOnInit() {
     const lessonId = Number(this.route.snapshot.paramMap.get('id'));
@@ -64,24 +69,25 @@ export class LessonDetailComponent implements OnInit {
     });
   }
 
-
   // 👇 Gọi API Gemini backend
- loadAISection() {
-  if (this.isGeneratingQuiz) return;      // ⛔ chặn spam
-  this.isGeneratingQuiz = true;
+  loadAISection() {
+    if (this.isGeneratingQuiz) return; // ⛔ chặn spam
+    this.isGeneratingQuiz = true;
 
-  const lessonId = Number(this.route.snapshot.paramMap.get('id'));
-  this.quizError = null;
-  this.showQuiz = false;
+    const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    this.quizError = null;
+    this.showQuiz = false;
 
-  this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`)
-    .subscribe({
+    this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`).subscribe({
       next: (res) => {
         try {
           const text = res?.aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
 
           if (text) {
-            const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const cleaned = text
+              .replace(/```json/g, '')
+              .replace(/```/g, '')
+              .trim();
             this.aiData = JSON.parse(cleaned);
             this.showQuiz = true;
             this.submitted = false;
@@ -96,7 +102,9 @@ export class LessonDetailComponent implements OnInit {
         }
 
         // ⏳ cooldown 3 giây
-        setTimeout(() => { this.isGeneratingQuiz = false; }, 3000);
+        setTimeout(() => {
+          this.isGeneratingQuiz = false;
+        }, 3000);
       },
 
       error: (err) => {
@@ -104,10 +112,12 @@ export class LessonDetailComponent implements OnInit {
         this.quizError = 'Không thể kết nối đến AI. Vui lòng thử lại.';
 
         // ⏳ cooldown 3 giây
-        setTimeout(() => { this.isGeneratingQuiz = false; }, 3000);
-      }
+        setTimeout(() => {
+          this.isGeneratingQuiz = false;
+        }, 3000);
+      },
     });
-}
+  }
   selectAnswer(questionIndex: number, option: string) {
     this.userAnswers[questionIndex] = option.charAt(0); // chỉ lấy A/B/C/D
   }
@@ -117,20 +127,20 @@ export class LessonDetailComponent implements OnInit {
 
     let correctCount = 0;
     this.aiData.quiz.forEach((q: any, i: number) => {
-    const user = this.userAnswers[i];
-    const isCorrect = user === q.answer;
+      const user = this.userAnswers[i];
+      const isCorrect = user === q.answer;
 
-    if (isCorrect) {
+      if (isCorrect) {
         correctCount++;
       }
-          this.resultStatus[i] = isCorrect ? "correct" : "wrong";
+      this.resultStatus[i] = isCorrect ? 'correct' : 'wrong';
     });
 
     this.score = correctCount;
     this.submitted = true;
 
     alert(`🎯 Bạn được ${correctCount}/${this.aiData.quiz.length} điểm!`);
-        const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    const lessonId = Number(this.route.snapshot.paramMap.get('id'));
     const userId = Number(localStorage.getItem('userId')) || 1; // fallback demo
 
     this.api.submitProgress({ userId, lessonId, score: correctCount }).subscribe({
@@ -140,7 +150,7 @@ export class LessonDetailComponent implements OnInit {
       error: (err: any) => {
         console.error('Lưu progress lỗi', err);
         alert('Lưu điểm thất bại — thử lại sau.');
-      }
+      },
     });
   }
 }

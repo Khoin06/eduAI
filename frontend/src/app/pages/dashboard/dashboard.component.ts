@@ -15,18 +15,14 @@ interface Course {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,RouterModule],
-  templateUrl: './dashboard.component.html'
+  imports: [CommonModule, RouterModule],
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
   courses: Course[] = [];
   currentUser: any = null;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     // ✅ Lấy thông tin user hiện tại
@@ -49,22 +45,23 @@ export class DashboardComponent implements OnInit {
         this.courses = courses;
         console.log('Danh sách khóa học:', this.courses);
       },
-      error: (err) => console.error('Lỗi API khóa học:', err)
+      error: (err) => console.error('Lỗi API khóa học:', err),
     });
     // this.loadMyCourses();
   }
-// src/app/pages/dashboard/dashboard.component.ts
-loadMyCourses() {
-  const user = JSON.parse(localStorage.getItem('current_user') || '{}');
-  const userId = user.id;
+  // src/app/pages/dashboard/dashboard.component.ts
+  loadMyCourses() {
+    const user = JSON.parse(localStorage.getItem('current_user') || '{}');
+    const userId = user.id;
 
-  if (!userId) return;
+    if (!userId) return;
 
-  this.http.get<any[]>('http://localhost:8080/api/courses/my-courses?userId=' + userId)
-    .subscribe(data => {
-      this.courses = data;
-    });
-}
+    this.http
+      .get<any[]>('http://localhost:8080/api/courses/my-courses?userId=' + userId)
+      .subscribe((data) => {
+        this.courses = data;
+      });
+  }
 
   goToCourseDetail(courseId: number) {
     this.router.navigate(['/course', courseId]);

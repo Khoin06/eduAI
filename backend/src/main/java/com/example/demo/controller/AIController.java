@@ -38,30 +38,30 @@ public class AIController {
 
         try {
             String prompt = """
-Bạn là trợ giảng lập trình. Hãy tạo 10 câu hỏi trắc nghiệm từ nội dung sau.
+                    Bạn là trợ giảng lập trình. Hãy tạo 10 câu hỏi trắc nghiệm từ nội dung sau.
 
-YÊU CẦU BẮT BUỘC:
-- Mỗi câu hỏi có 4 đáp án A, B, C, D.
-- Mỗi option phải bắt đầu bằng chữ cái A., B., C., D. Ví dụ: "A. Đây là đáp án".
-- Trả về duy nhất JSON hợp lệ, không markdown, không ```json.
+                    YÊU CẦU BẮT BUỘC:
+                    - Mỗi câu hỏi có 4 đáp án A, B, C, D.
+                    - Mỗi option phải bắt đầu bằng chữ cái A., B., C., D. Ví dụ: "A. Đây là đáp án".
+                    - Trả về duy nhất JSON hợp lệ, không markdown, không ```json.
 
-Cấu trúc JSON:
-{
-  "quiz": [
-    {
-      "question": "Câu hỏi?",
-      "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
-      "answer": "A"
-    }
-  ],
-  "suggestions": ["...", "...", "..."]
-}
+                    Cấu trúc JSON:
+                    {
+                      "quiz": [
+                        {
+                          "question": "Câu hỏi?",
+                          "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
+                          "answer": "A"
+                        }
+                      ],
+                      "suggestions": ["...", "...", "..."]
+                    }
 
-NỘI DUNG:
----
-%s
----
-""".formatted(lesson.getContent());
+                    NỘI DUNG:
+                    ---
+                    %s
+                    ---
+                    """.formatted(lesson.getContent());
 
             WebClient webClient = WebClient.create("https://generativelanguage.googleapis.com/v1beta");
             var response = webClient.post()

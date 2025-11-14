@@ -11,7 +11,7 @@ import { LessonService } from '../../../services/lesson.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './course-detail.component.html',
-  styleUrls: ['./course-detail.component.css']
+  styleUrls: ['./course-detail.component.css'],
 })
 export class CourseDetailComponent implements OnInit {
   course: any;
@@ -20,9 +20,12 @@ export class CourseDetailComponent implements OnInit {
   isLoading = true;
   userId: number | null = null;
   unlockedMap: Record<number, boolean> = {};
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router,private api: LessonService,) {
-
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router,
+    private api: LessonService
+  ) {}
 
   ngOnInit() {
     const courseId = this.route.snapshot.paramMap.get('id');
@@ -30,8 +33,8 @@ export class CourseDetailComponent implements OnInit {
     if (courseId) {
       this.loadCourseAndLessons(+courseId);
     }
-console.log("⚡ LocalStorage userId =", localStorage.getItem("userId"));
-console.log("⚡ UserId trong component =", this.userId);
+    console.log('⚡ LocalStorage userId =', localStorage.getItem('userId'));
+    console.log('⚡ UserId trong component =', this.userId);
   }
 
   loadCourseAndLessons(courseId: number) {
@@ -49,7 +52,7 @@ console.log("⚡ UserId trong component =", this.userId);
         console.log('Dữ liệu bài học:', data);
         this.lessons = data.sort((a: any, b: any) => (a.orderIndex || 0) - (b.orderIndex || 0));
         this.isLoading = false;
-         this.checkUnlockStates(); 
+        this.checkUnlockStates();
       },
       error: (err) => {
         console.error('Lỗi API bài học:', err);
@@ -67,15 +70,12 @@ console.log("⚡ UserId trong component =", this.userId);
 
   // Gọi quiz (nếu có)
   loadQuiz(lessonId: number) {
-    this.http
-      .get(`http://localhost:8080/api/quizzes/lesson/${lessonId}`)
-      .subscribe({
-        next: (quiz: any) => (this.selectedLesson.quiz = quiz),
-        error: () => console.log('Không có quiz cho bài này'),
-      });
-      
+    this.http.get(`http://localhost:8080/api/quizzes/lesson/${lessonId}`).subscribe({
+      next: (quiz: any) => (this.selectedLesson.quiz = quiz),
+      error: () => console.log('Không có quiz cho bài này'),
+    });
   }
-    // Kiểm tra bài có mở không (dựa trên bài trước)
+  // Kiểm tra bài có mở không (dựa trên bài trước)
   async isUnlockedForLessonIndex(index: number): Promise<boolean> {
     // bài đầu luôn mở
     if (index === 0) return true;
@@ -113,39 +113,35 @@ console.log("⚡ UserId trong component =", this.userId);
     }
     this.router.navigate(['/lesson', lesson.id]);
   }
-checkUnlockStates() {
-  if (!this.userId) {
-    console.warn("Chưa đăng nhập → không mở bài nào");
-    return;
+  checkUnlockStates() {
+    if (!this.userId) {
+      console.warn('Chưa đăng nhập → không mở bài nào');
+      return;
+    }
+
+    // ⭐ LUÔN MỞ BÀI 1
+    if (this.lessons.length > 0) {
+      this.unlockedMap[this.lessons[0].id] = true;
+    }
+
+    console.log('== BẮT ĐẦU CHECK MỞ BÀI ==');
+
+    for (let i = 1; i < this.lessons.length; i++) {
+      const prevLessonId = this.lessons[i - 1].id;
+      const currentLessonId = this.lessons[i].id;
+
+      console.log('Check bài trước:', prevLessonId);
+
+      this.api.checkPassed(this.userId, prevLessonId).subscribe({
+        next: (passed: any) => {
+          console.log(`Bài ${i} unlock?`, passed ? '✔ TRUE' : '❌ FALSE');
+          this.unlockedMap[currentLessonId] = !!passed;
+        },
+        error: (err) => {
+          console.error('Lỗi API checkPassed:', err);
+          this.unlockedMap[currentLessonId] = false;
+        },
+      });
+    }
   }
-
-  // ⭐ LUÔN MỞ BÀI 1
-  if (this.lessons.length > 0) {
-    this.unlockedMap[this.lessons[0].id] = true;
-  }
-
-  console.log("== BẮT ĐẦU CHECK MỞ BÀI ==");
-
-  for (let i = 1; i < this.lessons.length; i++) {
-    const prevLessonId = this.lessons[i - 1].id;
-    const currentLessonId = this.lessons[i].id;
-
-    console.log("Check bài trước:", prevLessonId);
-
-    this.api.checkPassed(this.userId, prevLessonId).subscribe({
-      next: (passed: any) => {
-        console.log(
-          `Bài ${i} unlock?`,
-          passed ? "✔ TRUE" : "❌ FALSE"
-        );
-        this.unlockedMap[currentLessonId] = !!passed;
-      },
-      error: (err) => {
-        console.error("Lỗi API checkPassed:", err);
-        this.unlockedMap[currentLessonId] = false;
-      }
-    });
-  }
-}
-
 }
