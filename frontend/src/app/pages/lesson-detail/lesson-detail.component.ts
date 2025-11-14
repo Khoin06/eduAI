@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatDialogComponent } from '../chat-dialog/chat-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { LessonService } from '../../services/lesson.service';
 
 @Component({
   selector: 'app-lesson-detail',
@@ -27,7 +29,7 @@ export class LessonDetailComponent implements OnInit {
 
   isGeneratingQuiz = false; // trạng thái loading quiz AI
   quizError: string | null = null; // nếu lỗi AI
-  constructor(private route: ActivatedRoute, private http: HttpClient, private dialog: MatDialog) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private dialog: MatDialog, private router: Router,private api: LessonService) {}
 
   ngOnInit() {
     const lessonId = Number(this.route.snapshot.paramMap.get('id'));
@@ -62,54 +64,50 @@ export class LessonDetailComponent implements OnInit {
     });
   }
 
-  // 👇 Khi scroll tới cuối, gọi AI
-  @HostListener('window:scroll', [])
-  onScroll() {
-    const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
-    if (scrollBottom && !this.reachedBottom) {
-      this.reachedBottom = true;
-      this.loadAISection();
-    }
-  }
 
   // 👇 Gọi API Gemini backend
-  loadAISection() {
-    const lessonId = Number(this.route.snapshot.paramMap.get('id'));
-    this.isGeneratingQuiz = true;
-    this.quizError = null;
-    this.showQuiz = false;
-    this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`).subscribe({
+ loadAISection() {
+  if (this.isGeneratingQuiz) return;      // ⛔ chặn spam
+  this.isGeneratingQuiz = true;
+
+  const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+  this.quizError = null;
+  this.showQuiz = false;
+
+  this.http.get<any>(`http://localhost:8080/api/ai/lesson-assistant/${lessonId}`)
+    .subscribe({
       next: (res) => {
         try {
           const text = res?.aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            // 🔹 Làm sạch chuỗi Markdown (bỏ ```json và ```)
-            const cleaned = text
-              .replace(/```json/g, '')
-              .replace(/```/g, '')
-              .trim();
 
-            // 🔹 Parse JSON sạch
+          if (text) {
+            const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
             this.aiData = JSON.parse(cleaned);
-            console.log('✅ AI data parsed:', this.aiData);
             this.showQuiz = true;
+            this.submitted = false;
+            this.userAnswers = [];
+            this.resultStatus = [];
+            this.score = null;
           } else {
-            console.warn('⚠️ Không có nội dung từ AI:', res);
             this.quizError = 'Không nhận được dữ liệu từ AI.';
           }
         } catch (err) {
-          console.error('❌ Lỗi parse AI JSON:', err, res);
           this.quizError = 'Lỗi khi phân tích dữ liệu từ AI.';
         }
-        this.isGeneratingQuiz = false; // tắt loading
+
+        // ⏳ cooldown 3 giây
+        setTimeout(() => { this.isGeneratingQuiz = false; }, 3000);
       },
+
       error: (err) => {
         console.error('AI error:', err);
         this.quizError = 'Không thể kết nối đến AI. Vui lòng thử lại.';
-        this.isGeneratingQuiz = false;
-      },
+
+        // ⏳ cooldown 3 giây
+        setTimeout(() => { this.isGeneratingQuiz = false; }, 3000);
+      }
     });
-  }
+}
   selectAnswer(questionIndex: number, option: string) {
     this.userAnswers[questionIndex] = option.charAt(0); // chỉ lấy A/B/C/D
   }
@@ -122,7 +120,7 @@ export class LessonDetailComponent implements OnInit {
     const user = this.userAnswers[i];
     const isCorrect = user === q.answer;
 
-    if (this.userAnswers[i] === q.answer) {
+    if (isCorrect) {
         correctCount++;
       }
           this.resultStatus[i] = isCorrect ? "correct" : "wrong";
@@ -132,5 +130,17 @@ export class LessonDetailComponent implements OnInit {
     this.submitted = true;
 
     alert(`🎯 Bạn được ${correctCount}/${this.aiData.quiz.length} điểm!`);
+        const lessonId = Number(this.route.snapshot.paramMap.get('id'));
+    const userId = Number(localStorage.getItem('userId')) || 1; // fallback demo
+
+    this.api.submitProgress({ userId, lessonId, score: correctCount }).subscribe({
+      next: () => {
+        alert(`🎯 Bạn được ${correctCount}/${this.aiData.quiz.length} điểm! (Đã lưu vào DB)`);
+      },
+      error: (err: any) => {
+        console.error('Lưu progress lỗi', err);
+        alert('Lưu điểm thất bại — thử lại sau.');
+      }
+    });
   }
 }

@@ -38,22 +38,34 @@ public class AIController {
 
         try {
             String prompt = """
-                    Bạn là trợ giảng lập trình. Tạo quiz 10 câu trắc nghiệm ngắn và nội dung gợi ý chat từ nội dung sau:
-                    ---
-                    %s
-                    ---
-                    Trả về JSON theo mẫu:
-                    {
-                      "quiz": [
-                        { "question": "...", "options": ["A","B","C","D"], "answer": "B" }
-                      ],
-                      "suggestions": ["Tóm tắt phần này", "Cho ví dụ thêm", "Giải thích sâu hơn về ..."]
-                    }
-                    """.formatted(lesson.getContent());
+Bạn là trợ giảng lập trình. Hãy tạo 10 câu hỏi trắc nghiệm từ nội dung sau.
 
-            WebClient webClient = WebClient.create("https://generativelanguage.googleapis.com/v1");
+YÊU CẦU BẮT BUỘC:
+- Mỗi câu hỏi có 4 đáp án A, B, C, D.
+- Mỗi option phải bắt đầu bằng chữ cái A., B., C., D. Ví dụ: "A. Đây là đáp án".
+- Trả về duy nhất JSON hợp lệ, không markdown, không ```json.
+
+Cấu trúc JSON:
+{
+  "quiz": [
+    {
+      "question": "Câu hỏi?",
+      "options": ["A. ...", "B. ...", "C. ...", "D. ..."],
+      "answer": "A"
+    }
+  ],
+  "suggestions": ["...", "...", "..."]
+}
+
+NỘI DUNG:
+---
+%s
+---
+""".formatted(lesson.getContent());
+
+            WebClient webClient = WebClient.create("https://generativelanguage.googleapis.com/v1beta");
             var response = webClient.post()
-                    .uri("/models/gemini-2.5-flash:generateContent?key=" + geminiApiKey)
+                    .uri("/models/gemini-2.5-flash-lite:generateContent?key=" + geminiApiKey)
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("contents", new Object[] {
                             Map.of("parts", new Object[] { Map.of("text", prompt) })

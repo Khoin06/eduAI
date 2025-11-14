@@ -1,20 +1,19 @@
-<!-- HIỂN THỊ TRẠNG THÁI ĐANG LOAD -->
+<!-- LOADING -->
 <div *ngIf="isLoading" class="text-center text-muted py-5">
-  <div class="spinner-border text-primary" role="status"></div>
+  <div class="spinner-border text-primary"></div>
   <p class="mt-3">Đang tải dữ liệu khóa học...</p>
 </div>
 
-<!-- KHI CÓ DỮ LIỆU -->
-<div class="container py-5" *ngIf="!isLoading && (course || (lessons && lessons.length > 0))">
-  <h1 class="display-5 fw-bold">{{ course?.title }}</h1>
-  <p class="lead text-muted">{{ course?.description }}</p>
+<!-- NỘI DUNG KHÓA HỌC -->
+<div class="container py-5" *ngIf="!isLoading && course">
+  <h1 class="fw-bold mb-2">{{ course.title }}</h1>
+  <p class="lead text-muted">{{ course.description }}</p>
 
-  <hr class="my-4" />
+  <hr />
 
   <!-- DANH SÁCH BÀI HỌC -->
   <h4>Nội dung khóa học ({{ lessons.length }} bài)</h4>
-
-  <ul class="list-group list-group-flush mt-3">
+  <ul class="list-group mt-3">
     <li
       *ngFor="let lesson of lessons; let i = index"
       class="list-group-item d-flex justify-content-between align-items-center"
@@ -24,14 +23,22 @@
         <small class="text-muted d-block">{{ lesson.duration }} phút</small>
       </div>
 
-<button
-  class="btn btn-primary btn-sm rounded-pill"
-  (click)="goToLessonDetail(lesson.id)">
-  Xem
-</button>
-
+      <!-- BUTTON -->
+        <button
+          class="btn btn-sm"
+          [ngClass]="unlockedMap[lesson.id] ? 'btn-primary' : 'btn-outline-secondary disabled'"
+          (click)="goToLesson(lesson, i)"
+        >
+          {{ unlockedMap[lesson.id] ? 'Xem' : 'Khoá' }}
+        </button>
     </li>
   </ul>
+
+  <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm mt-4">
+    ← Quay lại
+  </a>
+</div>
+
 
   <!-- CHI TIẾT BÀI HỌC -->
   <div *ngIf="selectedLesson" class="card mt-4 shadow-sm">
@@ -73,7 +80,7 @@
   <div *ngIf="!selectedLesson" class="text-center text-muted py-5">
     Chọn một bài học để xem nội dung
   </div>
-</div>
+
 
 <!-- KHI KHÔNG CÓ DỮ LIỆU -->
 <div *ngIf="!isLoading && lessons.length === 0" class="text-center text-muted py-5">

@@ -20,10 +20,12 @@ export class AuthService {
    */
   login(userData: any, token: string) {
     // Lưu user vào localStorage với key thống nhất
+    localStorage.setItem("userId", userData.id);
     localStorage.setItem('current_user', JSON.stringify(userData));
     localStorage.setItem('token', token);
     localStorage.setItem('role', userData.role);
     this.isLoggedInSubject.next(true);
+    
   }
 
   /**
