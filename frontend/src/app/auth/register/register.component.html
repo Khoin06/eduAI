@@ -1,88 +1,77 @@
-<!-- src/app/auth/register/register.component.html -->
-<div class="min-vh-100 d-flex overflow-hidden">
-    <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-light position-relative overflow-hidden">
-    <img 
-      src="/assets/images/background.jpg" 
-      alt="Đăng ký học tập cùng EduAI" 
-      class="img-fluid position-relative"
-      style="max-width: 90%; z-index: 1;"
-    >
-  </div>
-  <!-- TRÁI: Form ĐĂNG KÝ (bên trái) -->
-  <div class="col-lg-6 d-flex align-items-center justify-content-center bg-white p-4 overflow-auto">
-    <div class="w-100" style="max-width: 400px;">
-      <h1 class="h4 fw-bold mb-2 text-dark">
-        Tạo tài khoản để bắt đầu học tập
-      </h1>
-      <p class="text-muted mb-4">Điền thông tin để đăng ký</p>
+<div class="register-wrapper">
 
-      <form (ngSubmit)="register()" #registerForm="ngForm">
-        <!-- Họ tên -->
-        <div class="mb-3">
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            [(ngModel)]="username"
-            name="Username"
-            placeholder="Họ và tên"
-            required
-            style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0;"
-          />
+  <!-- Particle Background -->
+  <div id="particles"></div>
+
+  <div class="container h-100 d-flex align-items-center justify-content-center">
+    <div class="row align-items-center justify-content-center w-100">
+
+      <!-- Left Illustration -->
+      <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+        <div class="illustration-3d">
+          <img src="/assets/images/background.jpg" alt="" class="illus-img">
         </div>
+      </div>
 
+      <!-- Right Form -->
+      <div class="col-lg-5 col-md-8 col-sm-10">
+        <div class="glass-card neon-glow animate-fade">
 
-        <!-- Mật khẩu -->
-        <div class="mb-3">
-          <input
-            type="password"
-            class="form-control form-control-lg"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Mật khẩu"
-            required
-            style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0;"
-          />
+          <h1 class="title">✨ Tạo tài khoản mới</h1>
+          <p class="subtitle">Tham gia hành trình học tập tuyệt vời của bạn</p>
+
+          <form (ngSubmit)="register()" #registerForm="ngForm">
+
+            <!-- Username / Full name -->
+            <input
+              type="text"
+              class="input-field"
+              name="username"
+              placeholder="Họ và tên"
+              [(ngModel)]="username"
+              required
+            />
+
+            <!-- Password -->
+            <input
+              type="password"
+              class="input-field"
+              name="password"
+              placeholder="Mật khẩu"
+              [(ngModel)]="password"
+              required
+            />
+
+            <button
+              type="submit"
+              class="login-btn"
+              [disabled]="isLoading || !registerForm.valid">
+              
+              <span [class.d-none]="isLoading">Đăng ký</span>
+
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+              <span [class.d-none]="!isLoading">Đang tạo...</span>
+            </button>
+
+          </form>
+
+          <div class="divider"><span>hoặc</span></div>
+
+          <!-- Social Buttons -->
+          <div class="row g-2 social-row">
+            <div class="col"><button class="social-btn"><i class="fab fa-google"></i> Google</button></div>
+            <div class="col"><button class="social-btn"><i class="fab fa-facebook"></i> Facebook</button></div>
+            <div class="col"><button class="social-btn"><i class="fab fa-apple"></i> Apple</button></div>
+          </div>
+
+          <p class="register">
+            Đã có tài khoản? <a routerLink="/login">Đăng nhập</a>
+          </p>
+
         </div>
-
-<button
-    type="submit"
-    class="btn btn-primary btn-lg w-100 fw-bold d-flex align-items-center justify-content-center gap-2"
-    [disabled]="isLoading || !registerForm.valid"
-    style="
-      height: 56px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #a435f0, #7e3bd1);
-      border: none;
-      box-shadow: 0 4px 12px rgba(164, 53, 240, 0.3);
-      transition: all 0.3s ease;
-      font-size: 1.1rem;
-      cursor: pointer;
-    "
-  >
-    <span [class.d-none]="isLoading">Đăng ký</span>
-    <span [class.d-none]="!isLoading" class="spinner-border spinner-border-sm" role="status"></span>
-    <span [class.d-none]="!isLoading">Đang tạo...</span>
-  </button>
-      </form>
-
-      <div class="d-flex align-items-center my-4">
-        <hr class="flex-grow-1"><span class="px-3 text-muted small">hoặc</span><hr class="flex-grow-1">
       </div>
 
-      <div class="row g-2">
-        <div class="col"><button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px;"><i class="fab fa-google"></i> Google</button></div>
-        <div class="col"><button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px;"><i class="fab fa-facebook"></i> Facebook</button></div>
-        <div class="col"><button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px;"><i class="fab fa-apple"></i> Apple</button></div>
-      </div>
-
-      <div class="text-center mt-4">
-        <p class="mb-0 text-muted small">
-          Đã có tài khoản? <a routerLink="/login" class="text-primary fw-semibold">Đăng nhập</a>
-        </p>
-      </div>
     </div>
   </div>
-
-
 
 </div>
