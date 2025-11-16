@@ -1,31 +1,78 @@
-/* src/app/shared/sidebar/sidebar.component.css */
+/* ===== SIDEBAR BASE ===== */
 .sidebar {
+  width: 260px;
+  padding-top: 2rem;
   overflow-y: auto;
   transition: transform 0.3s ease;
-  background-color: #6c757d !important; /* bg-secondary */
-  color: #fff !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.1);
 }
 
-.nav-link {
-  border-radius: 8px;
-  color: #495057;
+/* ĐỂ SIÊU ĐẸP: bo góc + bóng mờ */
+.sidebar-student {
+  background: linear-gradient(180deg, #7e3bd1, #a435f0);
+  color: white;
+}
+
+.sidebar-admin {
+  background: linear-gradient(180deg, #212529, #343a40);
+  color: white;
+}
+
+/* ----- LOGO TITLE ----- */
+.sidebar-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 6px rgba(255,255,255,0.4);
+}
+
+/* ===== LINKS ===== */
+.sidebar-link {
+  border-radius: 12px !important;
+  color: #ffffffd9;
   font-weight: 500;
   padding: 0.75rem 1rem;
-  transition: all 0.2s;
+  transition: all 0.25s ease !important;
+  display: flex;
+  align-items: center;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  background: #e7f1ff;
-  color: #060606;
+/* Icon đẹp hơn */
+.sidebar-link i {
+  font-size: 1.1rem;
+  width: 22px;
 }
 
-.nav-link i {
-  width: 20px;
-  text-align: center;
+/* Hover lung linh */
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #fff !important;
+  transform: translateX(4px);
+  box-shadow: 0 3px 12px rgba(255,255,255,0.2);
 }
 
-/* Ẩn sidebar trên mobile */
+/* Active link */
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.30) !important;
+  color: #fff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(255,255,255,0.35);
+}
+
+/* ----- SCROLLBAR ----- */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 20px;
+}
+
+/* Mobile tự ẩn sidebar */
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);

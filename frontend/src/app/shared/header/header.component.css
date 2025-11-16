@@ -1,29 +1,117 @@
 /* src/app/shared/header/header.component.css */
-.navbar-brand img {
-  filter: brightness(0) invert(1);
+
+/* ========================= */
+/* NAVBAR STYLE PREMIUM      */
+/* ========================= */
+.edu-navbar {
+  background: linear-gradient(135deg, #7e3bd1, #a435f0);
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+}
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* để không bị che */
 }
 
-.nav-link {
-  font-weight: 500;
-  transition: color 0.2s;
+/* LOGO */
+.navbar-brand {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #fff !important;
+.navbar-brand i {
+  font-size: 1.6rem;
+  color: #fff;
 }
 
+/* ========================= */
+/* NÚT LOGIN - REGISTER      */
+/* ========================= */
+.login-btn {
+  border-radius: 12px !important;
+  border: 2px solid rgba(255,255,255,0.7) !important;
+  padding: 8px 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.login-btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+  border-color: #fff !important;
+}
+
+/* Nút ĐĂNG KÝ */
+.register-btn {
+  background: #fff !important;
+  color: #7e3bd1 !important;
+  border-radius: 12px !important;
+  padding: 8px 20px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.register-btn:hover {
+  background: #f2e6ff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255,255,255,0.3);
+}
+
+/* ========================= */
+/* USER AVATAR + DROPDOWN    */
+/* ========================= */
+.user-info {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.user-info:hover {
+  opacity: 0.85;
+}
+
+/* Avatar tròn + viền neon */
+.avatar-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #fff, #d6b3ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Dropdown đẹp hơn */
 .dropdown-menu {
-  z-index: 1055 !important; /* CAO HƠN MỌI THỨ */
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 0.5rem;
-}
-
-.dropdown-menu-end {
-  right: 0;
-  left: auto;
+  border-radius: 14px !important;
+  padding: 0.5rem 0;
+  animation: fadeIn 0.15s ease-in-out;
 }
 
 .dropdown-item {
-  font-size: 0.9rem;
+  padding: 0.6rem 1rem !important;
+  border-radius: 8px;
+}
+
+.dropdown-item:hover {
+  background: rgba(120, 50, 230, 0.1);
+}
+
+/* ========================= */
+/* ANIMATION                 */
+/* ========================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

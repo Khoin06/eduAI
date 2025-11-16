@@ -1,60 +1,63 @@
-<div *ngIf="role === 'STUDENT'" class="sidebar bg-warning text-light vh-100 position-fixed">
+<div *ngIf="role === 'STUDENT'" class="sidebar sidebar-student vh-100 position-fixed">
   <div class="ps-3">
-    <h5 class="text-info fw-bold mb-4">EduAI</h5>
+    <h5 class="sidebar-title">EduAI</h5>
+
     <ul class="nav nav-pills flex-column">
       <li class="nav-item">
-        <a routerLink="/dashboard" class="nav-link text-light sidebar-link">
+        <a routerLink="/dashboard" class="nav-link sidebar-link">
           <i class="fas fa-home me-2"></i> Trang chủ
         </a>
       </li>
 
       <li class="nav-item">
-        <a routerLink="/courses" class="nav-link text-light sidebar-link">
+        <a routerLink="/courses" class="nav-link sidebar-link">
           <i class="fas fa-book me-2"></i> Khóa học của tôi
         </a>
       </li>
 
       <li class="nav-item">
-        <a routerLink="/progress" class="nav-link text-light sidebar-link">
+        <a routerLink="/progress" class="nav-link sidebar-link">
           <i class="fas fa-chart-line me-2"></i> Tiến độ học
         </a>
       </li>
 
       <li class="nav-item">
-        <a routerLink="/certificates" class="nav-link text-light sidebar-link">
+        <a routerLink="/certificates" class="nav-link sidebar-link">
           <i class="fas fa-certificate me-2"></i> Chứng chỉ
         </a>
       </li>
 
       <li class="nav-item mt-4">
-        <a routerLink="/settings" class="nav-link text-light sidebar-link">
+        <a routerLink="/settings" class="nav-link sidebar-link">
           <i class="fas fa-cog me-2"></i> Cài đặt
         </a>
       </li>
     </ul>
   </div>
 </div>
-<div class="sidebar-offset" [style.marginLeft.px]="260"></div>
-<div *ngIf="role === 'ADMIN'" class="sidebar bg-dark text-light vh-100 position-fixed">
+
+<div *ngIf="role === 'ADMIN'" class="sidebar sidebar-admin vh-100 position-fixed">
   <div class="ps-3">
     <ul class="nav nav-pills flex-column">
       <li class="nav-item">
-        <a routerLink="/admin" class="nav-link text-light sidebar-link">
+        <a routerLink="/admin" class="nav-link sidebar-link">
           <i class="fas fa-tachometer-alt me-2"></i> Dashboard
         </a>
       </li>
 
       <li class="nav-item">
-        <a routerLink="/admin/courses" class="nav-link text-light sidebar-link">
+        <a routerLink="/admin/courses" class="nav-link sidebar-link">
           <i class="fas fa-book-open me-2"></i> Quản lý khóa học
         </a>
       </li>
 
       <li class="nav-item">
-        <a routerLink="/admin/user-list" class="nav-link text-light sidebar-link">
+        <a routerLink="/admin/user-list" class="nav-link sidebar-link">
           <i class="fas fa-users me-2"></i> Quản lý người dùng
         </a>
       </li>
     </ul>
   </div>
 </div>
+
+<div class="sidebar-offset" [style.marginLeft.px]="260"></div>

@@ -1,5 +1,5 @@
 <!-- src/app/shared/header/header.component.html -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark edu-navbar shadow-sm">
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/">
@@ -11,33 +11,39 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar Collapse -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
 
-        <!-- HIỆN KHI CHƯA ĐĂNG NHẬP -->
+        <!-- CHƯA ĐĂNG NHẬP -->
         <ng-container *ngIf="!(authService.isLoggedIn$ | async)">
           <li class="nav-item">
-            <a routerLink="/login" class="btn btn-outline-light me-2">Đăng nhập</a>
+            <a routerLink="/login" class="btn btn-outline-light login-btn">Đăng nhập</a>
           </li>
           <li class="nav-item">
-            <a routerLink="/register" class="btn btn-light text-primary">Đăng ký</a>
+            <a routerLink="/register" class="btn register-btn">Đăng ký</a>
           </li>
         </ng-container>
 
-        <!-- HIỆN KHI ĐÃ ĐĂNG NHẬP -->
+        <!-- ĐÃ ĐĂNG NHẬP -->
         <ng-container *ngIf="authService.isLoggedIn$ | async">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white" href="#" role="button" data-bs-toggle="dropdown">
-              <img [src]="currentUser?.avatar || '/assets/images/background.jpg'" 
-                   alt="Avatar" class="rounded-circle" width="32" height="32">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 user-info" 
+               href="#" role="button" data-bs-toggle="dropdown">
+
+              <div class="avatar-wrapper">
+                <img [src]="currentUser?.avatar || '/assets/images/background.jpg'" 
+                     alt="Avatar" class="avatar-img">
+              </div>
+
               <span>{{ currentUser?.username || 'User' }}</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow position-absolute">
-              <li><a class="dropdown-item" routerLink="/profile" routerLinkActive="active"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
-              <!-- <li><a class="dropdown-item" routerLink="/settings"><i class="fas fa-cog me-2"></i> Cài đặt</a></li> -->
+
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg mt-2">
+              <li><a class="dropdown-item" routerLink="/profile"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item text-danger" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+              <li><a class="dropdown-item text-danger" (click)="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
+              </li>
             </ul>
           </li>
         </ng-container>
