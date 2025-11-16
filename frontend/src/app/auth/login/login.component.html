@@ -1,73 +1,59 @@
-<!-- src/app/auth/login/login.component.html -->
-<div class="d-flex overflow-hidden align-items-center bg-white py-5">
-  <div class="container">
-    <div class="row align-items-center g-5">
+<div class="login-wrapper">
+  
+  <!-- Particle Background -->
+  <div id="particles"></div>
 
-      <!-- TRÁI: Ảnh minh họa -->
+  <div class="container h-100 d-flex align-items-center justify-content-center">
+    <div class="row align-items-center justify-content-center w-100">
 
-  <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-light position-relative overflow-hidden">
-    <img 
-      src="/assets/images/background.jpg" 
-      alt="Đăng ký học tập cùng EduAI" 
-      class="img-fluid position-relative"
-      style="max-width: 90%; z-index: 1;"
-    >
-  </div>
-      <!-- PHẢI: Form đăng nhập -->
-      <div class="col-lg-6 d-flex justify-content-center">
-        <div class="w-100" style="max-width: 400px;">
-          <h1 class="h4 fw-bold mb-2 text-dark">
-            Đăng nhập để tiếp tục hành trình học tập của bạn
-          </h1>
+      <!-- LEFT Illustration -->
+      <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+        <div class="illustration-3d">
+          <img src="/assets/images/background.jpg" alt="" class="illus-img">
+        </div>
+      </div>
+
+      <!-- RIGHT Form -->
+      <div class="col-lg-5 col-md-8 col-sm-10">
+        <div class="glass-card neon-glow animate-fade">
+
+          <h1 class="title">✨ Chào mừng trở lại</h1>
+          <p class="subtitle">Bắt đầu hành trình học tập tuyệt vời của bạn</p>
 
           <form (ngSubmit)="login()" #loginForm="ngForm">
-                        <div class="mb-3">
-              <input
-                type="username"
-                class="form-control form-control-lg"
-                [(ngModel)]="username"
-                name="username"
-                placeholder="username"
-                required
-                [disabled]="isLoading"
-                style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0; padding: 0 1rem;"
-              />
-            </div>
-            <div class="mb-3">
-              <input
-                type="password"
-                class="form-control form-control-lg"
-                [(ngModel)]="password"
-                name="password"
-                placeholder="password"
-                required
-                [disabled]="isLoading"
-                style="height: 56px; border-radius: 8px; border: 1.5px solid #d1d7e0; padding: 0 1rem;"
-              />
-            </div>
 
-            <button
-              type="submit"
-              class="btn btn-lg w-100 fw-semibold text-white"
-              [disabled]="isLoading || !loginForm.valid"
-              style="height: 56px; border-radius: 8px; background: #a435f0; border: none;"
-            >
-              {{ isLoading ? 'Đang xử lý...' : 'Tiếp tục' }}
+            <input
+              type="text"
+              class="input-field"
+              name="username"
+              [(ngModel)]="username"
+              placeholder="Tên đăng nhập"
+              required
+            />
+
+            <input
+              type="password"
+              class="input-field"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Mật khẩu"
+              required
+            />
+
+            <button class="login-btn" [disabled]="isLoading || !loginForm.valid">
+              {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}
             </button>
           </form>
 
-          <div class="d-flex align-items-center my-4">
-            <hr class="flex-grow-1"><span class="px-3 text-muted small">hoặc</span><hr class="flex-grow-1">
-          </div>
+          <div class="divider"><span>hoặc</span></div>
 
+          <p class="register">
+            Chưa có tài khoản? <a routerLink="/register">Đăng ký ngay</a>
+          </p>
 
-          <div class="text-center mt-4">
-            <p class="mb-0 text-muted small">
-              Bạn không có tài khoản? <a routerLink="/register" class="text-primary fw-semibold">Đăng ký</a>
-            </p>
-          </div>
         </div>
       </div>
     </div>
   </div>
+
 </div>
