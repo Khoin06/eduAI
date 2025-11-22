@@ -36,8 +36,8 @@ public class LessonService {
             lesson.setDuration(updatedLesson.getDuration());
             lesson.setVideoUrl(updatedLesson.getVideoUrl());
             lesson.setOrderIndex(updatedLesson.getOrderIndex());
-            if (updatedLesson.getCourseId() != null)
-                lesson.setCourseId(updatedLesson.getCourseId());
+            if (updatedLesson.getCourse() != null)
+                lesson.setCourse(updatedLesson.getCourse());
             return lessonRepository.save(lesson);
         }
         return null;

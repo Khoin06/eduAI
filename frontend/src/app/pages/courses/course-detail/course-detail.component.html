@@ -19,6 +19,11 @@
       class="list-group-item d-flex justify-content-between align-items-center"
     >
       <div>
+        <i 
+        *ngIf="passedMap[lesson.id]" 
+        class="bi bi-check-circle-fill text-success me-2" 
+        title="Hoàn thành"
+      ></i>
         <strong>{{ i + 1 }}. {{ lesson.title }}</strong>
         <small class="text-muted d-block">{{ lesson.duration }} phút</small>
       </div>
@@ -33,8 +38,28 @@
         </button>
     </li>
   </ul>
+<div *ngIf="course">
+  <div class="course-progress-container mt-4">
+    <h3>Tiến Độ Khóa Học</h3>
+    <p>Đã hoàn thành: **{{ passedLessons }} / {{ totalLessons }}** bài học</p>
+    
+    <div class="progress" style="height: 20px;">
+      <div 
+        class="progress-bar bg-success" 
+        role="progressbar" 
+        [style.width.%]="courseProgress" 
+        [attr.aria-valuenow]="courseProgress" 
+        aria-valuemin="0" 
+        aria-valuemax="100">
+        {{ courseProgress }}%
+      </div>
+    </div>
+  </div>
 
-  <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm mt-4">
+  <hr>
+
+  </div>
+  <a routerLink="/courses" class="btn btn-outline-secondary btn-sm mt-4">
     ← Quay lại
   </a>
 </div>

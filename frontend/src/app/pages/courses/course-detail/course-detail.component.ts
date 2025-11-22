@@ -20,6 +20,10 @@ export class CourseDetailComponent implements OnInit {
   isLoading = true;
   userId: number | null = null;
   unlockedMap: Record<number, boolean> = {};
+  totalLessons = 0;
+  passedLessons = 0;
+  courseProgress = 0;
+  passedMap: Record<number, boolean> = {};
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -51,8 +55,11 @@ export class CourseDetailComponent implements OnInit {
       next: (data) => {
         console.log('Dữ liệu bài học:', data);
         this.lessons = data.sort((a: any, b: any) => (a.orderIndex || 0) - (b.orderIndex || 0));
+        this.totalLessons = this.lessons.length;
+        console.log('✅ 1. Tổng số bài học:', this.totalLessons);
         this.isLoading = false;
         this.checkUnlockStates();
+        this.calculateCourseProgress(courseId);
       },
       error: (err) => {
         console.error('Lỗi API bài học:', err);
@@ -61,6 +68,34 @@ export class CourseDetailComponent implements OnInit {
       },
     });
   }
+calculateCourseProgress(courseId: number) {
+  console.log('⚡ BẮT ĐẦU tính toán tiến độ...');
+  if (!this.userId || this.totalLessons === 0) {
+    this.courseProgress = 0;
+    return;
+  }
+
+  const url = `http://localhost:8080/api/progress/course/${courseId}/user/${this.userId}`;
+  
+  // GỌI API ĐỂ LẤY SỐ BÀI HỌC ĐÃ VƯỢT QUA
+  this.http.get<number>(url).subscribe({
+    next: (count) => {
+      this.passedLessons = count;
+      // Tính toán tỷ lệ phần trăm
+      this.courseProgress = Math.floor((this.passedLessons / this.totalLessons) * 100);
+      this.passedMap = {};
+      console.log(`✅ 2.Tiến độ khóa học: ${this.passedLessons}/${this.totalLessons} (${this.courseProgress}%)`);
+    },
+      error: (err) => {
+        if (err.status === 403) {
+          console.error('❌ Lỗi 403 (Forbidden): API tiến độ bị chặn. Cần sửa Spring Security.', err.url);
+        } else {
+          console.error('❌ Lỗi tính tiến độ:', err);
+        }
+        this.courseProgress = 0;
+      }
+  });
+}
 
   // Khi người dùng chọn bài học
   selectLesson(lesson: any) {
@@ -120,8 +155,18 @@ export class CourseDetailComponent implements OnInit {
     }
 
     // ⭐ LUÔN MỞ BÀI 1
+    this.passedMap = {};
     if (this.lessons.length > 0) {
       this.unlockedMap[this.lessons[0].id] = true;
+
+      // ⭐ Bước 2: Kiểm tra trực tiếp xem Bài 1 đã PASS chưa ⭐
+    this.api.checkPassed(this.userId, this.lessons[0].id).subscribe({
+      next: (passed: any) => {
+        this.passedMap[this.lessons[0].id] = !!passed; // Gán trạng thái PASS cho Bài 1
+console.log(`PASS STATUS BÀI 1: Lesson ID ${this.lessons[0].id} -> ${!!passed}`);
+      },
+      error: (err) => console.error('Lỗi checkPassed Bài 1:', err),
+    });
     }
 
     console.log('== BẮT ĐẦU CHECK MỞ BÀI ==');
@@ -136,10 +181,12 @@ export class CourseDetailComponent implements OnInit {
         next: (passed: any) => {
           console.log(`Bài ${i} unlock?`, passed ? '✔ TRUE' : '❌ FALSE');
           this.unlockedMap[currentLessonId] = !!passed;
+          this.passedMap[prevLessonId] = !!passed;
         },
         error: (err) => {
           console.error('Lỗi API checkPassed:', err);
           this.unlockedMap[currentLessonId] = false;
+          this.passedMap[prevLessonId] = false;
         },
       });
     }

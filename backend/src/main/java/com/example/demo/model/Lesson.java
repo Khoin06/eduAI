@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
- import jakarta.persistence.*;
+ import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "lessons")
@@ -8,8 +10,10 @@ public class Lesson {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "course_id")
-    private Long courseId;
+@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false) // Ánh xạ tới cột FK 'course_id' trong DB
+    @JsonIgnore
+    private Course course; // Tên thuộc tính này cho phép JPQL truy cập: lp.lesson.course.id
 
     @Column(nullable = false)
     private String title;
@@ -24,8 +28,8 @@ public class Lesson {
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Long getCourseId() { return courseId; }
-    public void setCourseId(Long courseId) { this.courseId = courseId; }
+public Course getCourse() { return course; }
+    public void setCourse(Course course) { this.course = course; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getContent() { return content; }
