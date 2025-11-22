@@ -1,0 +1,167 @@
+/* ---------------- GLOBAL BACKGROUND AURORA ---------------- */
+:host {
+  display: block;
+  position: relative;
+}
+
+:host::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(155, 88, 255, 0.28), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(100, 200, 255, 0.22), transparent 40%),
+    linear-gradient(180deg, #140532, #0e0824);
+  filter: blur(40px);
+  z-index: -1;
+}
+
+/* ---------------- TITLE ---------------- */
+h2.h4 {
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 4px 18px rgba(150, 80, 255, 0.7);
+}
+
+p {
+  color: rgba(255,255,255,0.75);
+}
+
+/* ---------------- MAIN BUTTON ---------------- */
+.btn-primary {
+  background: linear-gradient(135deg, #8e3bff, #b884ff);
+  border: none;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(150, 80, 255, 0.35);
+  transition: 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(150, 80, 255, 0.45);
+}
+
+/* ---------------- TABLE WRAP (GLASS) ---------------- */
+.card {
+  background: rgba(255,255,255,0.06) !important;
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 15px 45px rgba(40, 0, 80, 0.22);
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(90deg, rgba(155, 88, 255, 0.3), rgba(180, 130, 255, 0.2));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-header h5 {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ---------------- TABLE ---------------- */
+.table thead th {
+  color: rgba(255,255,255,0.9) !important;
+  font-weight: 700;
+  border-bottom: none;
+  background: rgba(255,255,255,0.06);
+}
+
+.table tbody tr {
+  transition: 0.25s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.table tbody tr:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(80,0,160,0.18);
+}
+
+/* ---------------- COURSE THUMBNAIL ---------------- */
+img.rounded {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+/* ---------------- COURSE TITLE LINK ---------------- */
+.text-primary {
+  color: #d7c7ff !important;
+  font-weight: 700;
+  text-shadow: 0 3px 12px rgba(150, 80, 255, 0.4);
+}
+
+.text-primary:hover {
+  color: #fff !important;
+}
+
+/* ---------------- DELETE BUTTON (OUTLINE) ---------------- */
+.btn-outline-danger {
+  border-radius: 10px;
+  border: 1px solid rgba(255,100,100,0.4);
+  color: #ff8080 !important;
+  transition: 0.25s ease;
+}
+
+.btn-outline-danger:hover {
+  background: rgba(255,100,100,0.15);
+  box-shadow: 0 8px 24px rgba(255,100,100,0.25);
+  transform: translateY(-3px);
+}
+
+/* ---------------- MODAL ---------------- */
+.modal-content {
+  background: rgba(30, 15, 60, 0.55);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(40,0,80,0.45);
+  color: #fff;
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ---------------- SELECT ITEM (GLASS CARD) ---------------- */
+.hover-shadow {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: 0.25s ease;
+}
+
+.hover-shadow:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 12px 32px rgba(80,0,160,0.2);
+}
+
+/* item selected */
+.bg-light {
+  background: linear-gradient(90deg, rgba(155, 88, 255, 0.3), rgba(200,170,255,0.15)) !important;
+  border: 1px solid rgba(200,170,255,0.25) !important;
+}
+
+/* modal button */
+.btn-success {
+  background: linear-gradient(135deg, #7cffd7, #34f7c3);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(80,255,200,0.35);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(80,255,200,0.45);
+}
+
+/* ---------------- TEXT MUTED ---------------- */
+.text-muted {
+  color: rgba(255,255,255,0.6) !important;
+}

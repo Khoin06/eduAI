@@ -1,0 +1,161 @@
+/* =========================================================
+   GLOBAL BACKGROUND AURORA
+========================================================= */
+:host {
+  display: block;
+  position: relative;
+}
+
+:host::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(150, 80, 255, 0.28), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(80, 200, 255, 0.22), transparent 55%),
+    linear-gradient(180deg, #0d061a, #140b2b);
+  filter: blur(45px);
+  z-index: -1;
+}
+
+/* =========================================================
+   MAIN TITLE + DESCRIPTION
+========================================================= */
+
+h1 {
+  color: #000;
+  text-shadow: 0 4px 20px rgba(150, 80, 255, 0.7);
+}
+
+.lead {
+  color: rgba(255,255,255,0.75) !important;
+  font-size: 1.1rem;
+}
+
+/* HR Glow */
+hr {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 4px 15px rgba(160, 90, 255, 0.3);
+}
+
+/* =========================================================
+   LESSON LIST (Glass + Hover Lift)
+========================================================= */
+
+.list-group-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  border-radius: 14px !important;
+  margin-bottom: 10px;
+  transition: 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.list-group-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 14px 35px rgba(120, 60, 255, 0.3);
+}
+
+/* Lesson text */
+.list-group-item strong {
+  color: #000;
+  text-shadow: 0 2px 8px rgba(150, 80, 255, 0.4);
+}
+
+.text-muted {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+/* =========================================================
+   BUTTON “Xem” – Neon Pill
+========================================================= */
+
+.btn-primary {
+  background: linear-gradient(135deg, #8b3dff, #b985ff);
+  border: none;
+  border-radius: 25px;
+  padding: 6px 16px;
+  font-weight: 600;
+  color: #000;
+  transition: 0.25s ease;
+  box-shadow: 0 6px 15px rgba(150, 80, 255, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #a05aff, #d1b4ff);
+  box-shadow: 0 10px 24px rgba(150, 80, 255, 0.45);
+}
+
+/* =========================================================
+   CARD (BẢNG NỘI DUNG BÀI HỌC)
+========================================================= */
+
+.card {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(40, 0, 80, 0.35);
+}
+
+.card-header {
+  background: linear-gradient(90deg, rgba(155, 88, 255, 0.35), rgba(180, 130, 255, 0.25));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-header h5 {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* =========================================================
+   QUIZ BOX
+========================================================= */
+
+.bg-light {
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px rgba(80,0,160,0.25);
+}
+
+.text-success {
+  color: #7cffd7 !important;
+  text-shadow: 0 2px 8px rgba(80,255,200,0.4);
+}
+
+/* Radio styling */
+.form-check-label {
+  color: #fff !important;
+}
+
+/* Submit quiz button */
+.btn-success {
+  background: linear-gradient(135deg, #6affc8, #28f7b1);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  box-shadow: 0 10px 22px rgba(80,255,200,0.3);
+  transition: 0.25s ease;
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(80,255,200,0.45);
+}
+
+/* =========================================================
+   EMPTY / HINT TEXT
+========================================================= */
+
+.text-center.text-muted {
+  color: rgba(255,255,255,0.5) !important;
+  text-shadow: 0 2px 10px rgba(150, 80, 255, 0.3);
+}

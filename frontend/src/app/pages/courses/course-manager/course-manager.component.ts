@@ -13,6 +13,8 @@ declare var bootstrap: any;
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, FilterPipe],
   templateUrl: './course-manager.component.html',
+    styleUrl: './course-manager.component.css'
+
 })
 export class CourseManagementComponent implements OnInit {
   @ViewChild('addModal') addModal!: ElementRef;

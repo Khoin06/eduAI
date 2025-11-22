@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Lesson;
+import com.example.demo.model.LessonProgress;
+import com.example.demo.repository.LessonProgressRepository;
 import com.example.demo.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.http.HttpHeaders;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -19,12 +22,13 @@ public class AIController {
 
     private final LessonRepository lessonRepository;
     private final WebClient webClient;
-
+    private final LessonProgressRepository progressRepository;
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    public AIController(LessonRepository lessonRepository, WebClient.Builder webClientBuilder) {
+    public AIController(LessonRepository lessonRepository, LessonProgressRepository progressRepository, WebClient.Builder webClientBuilder) {
         this.lessonRepository = lessonRepository;
+        this.progressRepository = progressRepository;
         this.webClient = webClientBuilder
                 .baseUrl("https://generativelanguage.googleapis.com/v1beta")
                 .build();
@@ -130,5 +134,4 @@ public class AIController {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
-
 }

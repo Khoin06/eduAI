@@ -36,8 +36,9 @@ private JwtAuthFilter jwtAuthFilter;
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()       // login/register
+                .requestMatchers("/api/ai/**").permitAll() 
                 .requestMatchers("/api/student/**").hasRole("STUDENT")
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/admin/**").hasRole("ADMIN") 
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
