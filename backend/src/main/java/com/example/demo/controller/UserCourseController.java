@@ -17,7 +17,6 @@ public class UserCourseController {
     @Autowired
     private UserCourseService userCourseService;
 
-    // ✅ Đúng URL: /api/user-courses/batch
     @PostMapping("/batch")
     public ResponseEntity<?> addBatch(@RequestBody List<UserCourse> list) {
         userCourseService.addBatch(list);

@@ -17,7 +17,9 @@ public class UserCourse {
     private Long courseId;
 
     private LocalDateTime enrolledAt = LocalDateTime.now();
-    private int progress = 0;
+
+    @Column(name = "progress")
+    private Integer progress;
 
     // Getters & Setters
     public Long getUserId() { return userId; }

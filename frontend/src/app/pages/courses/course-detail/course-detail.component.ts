@@ -87,7 +87,10 @@ calculateCourseProgress(courseId: number) {
       this.courseProgress = Math.floor((this.passedLessons / this.totalLessons) * 100);
       this.passedMap = {};
       console.log(`✅ 2.Tiến độ khóa học: ${this.passedLessons}/${this.totalLessons} (${this.courseProgress}%)`);
-      this.updateProgress(courseId);
+      this.updateProgress(courseId).subscribe({
+        next: () => console.log('Progress updated successfully'),
+        error: (err) => console.error('❌ Lỗi update progress:', err)
+      });
     },
       error: (err) => {
         if (err.status === 403) {

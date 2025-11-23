@@ -58,43 +58,6 @@
     </div>
   </div>
 
-  <!-- KHÓA HỌC -->
-  <h2 class="h4 fw-bold text-dark mb-3">Khóa học đang học</h2>
-
-  <!-- CÓ KHÓA HỌC -->
-  <div class="row g-4" *ngIf="courses.length > 0">
-    <div class="col-md-6 col-lg-4" *ngFor="let course of courses  ">
-      <!-- THÊM (click) + cursor-pointer -->
-      <div class="course-card bg-white rounded-4 shadow-sm overflow-hidden border cursor-pointer"
-           (click)="goToCourseDetail(course.id)">
-        <img [src]="course.imageUrl || '/assets/images/course-default.jpg'" 
-             class="w-100" 
-             style="height: 160px; object-fit: cover;" 
-             alt="{{ course.title }}">
-
-        <div class="p-3">
-          <h5 class="fw-semibold mb-1">{{ course.title }}</h5>
-          <p class="text-muted small mb-2">Giảng viên: {{ course.title || 'Chưa có' }}</p>
-
-          <div class="progress mb-2" style="height: 6px;">
-            <div class="progress-bar bg-success" 
-                 [style.width.%]="course.progress || 0">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <small class="text-success fw-semibold">{{ course.progress || 0 }}% hoàn thành</small>
-            <a [routerLink]="['/course', course.id]" 
-               class="btn btn-sm btn-outline-primary"
-               (click)="$event.stopPropagation()">
-              Tiếp tục
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- KHÔNG CÓ KHÓA HỌC -->
   <div class="text-center py-5" *ngIf="courses.length === 0">
     <p class="text-muted">Bạn chưa đăng ký khóa học nào.</p>
