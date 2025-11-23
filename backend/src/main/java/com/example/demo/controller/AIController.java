@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Course;
 import com.example.demo.model.Lesson;
 import com.example.demo.model.LessonProgress;
+import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.LessonProgressRepository;
 import com.example.demo.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +25,15 @@ public class AIController {
     private final LessonRepository lessonRepository;
     private final WebClient webClient;
     private final LessonProgressRepository progressRepository;
+    private final CourseRepository courseRepository;
+
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    public AIController(LessonRepository lessonRepository, LessonProgressRepository progressRepository, WebClient.Builder webClientBuilder) {
+    public AIController(LessonRepository lessonRepository, LessonProgressRepository progressRepository,CourseRepository courseRepository, WebClient.Builder webClientBuilder) {
         this.lessonRepository = lessonRepository;
         this.progressRepository = progressRepository;
+        this.courseRepository = courseRepository;
         this.webClient = webClientBuilder
                 .baseUrl("https://generativelanguage.googleapis.com/v1beta")
                 .build();
@@ -134,4 +139,73 @@ public class AIController {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
+    @PostMapping("/recommend-courses")
+public ResponseEntity<?> recommendCourses(@RequestBody Map<String, String> payload) {
+    String message = payload.get("message");
+    if (message == null || message.isBlank()) {
+        return ResponseEntity.badRequest().body(Map.of("error", "Nội dung yêu cầu trống!"));
+    }
+
+    // Lấy toàn bộ khóa học từ DB
+    List<Course> courses = courseRepository.findAll();
+
+    // Chuẩn bị dữ liệu khóa học
+    String courseList = courses.stream()
+            .map(c -> "- ID: %d | %s | %s".formatted(c.getId(), c.getTitle(), c.getDescription()))
+            .collect(Collectors.joining("\n"));
+
+    String prompt = """
+        Bạn là hệ thống gợi ý khóa học. 
+        Dựa trên yêu cầu của người dùng: "%s"
+
+        Đây là danh sách khóa học hiện có trong hệ thống:
+        %s
+
+        Nhiệm vụ:
+        - Chọn tối đa 5 khóa học phù hợp nhất.
+        - Ưu tiên khóa học trùng chủ đề, nội dung hoặc kỹ năng cần học.
+        - Trả về JSON hợp lệ, không markdown.
+
+        Cấu trúc JSON bắt buộc:
+        {
+          "recommended": [
+            { "id": 1, "title": "...", "reason": "..." }
+          ]
+        }
+        """.formatted(message, courseList);
+
+    try {
+        WebClient client = WebClient.builder()
+                .baseUrl("https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        Map requestBody = Map.of(
+                "contents", List.of(Map.of(
+                        "parts", List.of(Map.of("text", prompt))
+                )));
+
+        Map response = client.post()
+                .uri(uriBuilder -> uriBuilder.queryParam("key", geminiApiKey).build())
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+
+        // Lấy text
+        String reply = "Không có phản hồi.";
+        try {
+            Map candidate = (Map) ((List) response.get("candidates")).get(0);
+            Map content = (Map) candidate.get("content");
+            Map part = (Map) ((List) content.get("parts")).get(0);
+            reply = (String) part.get("text");
+        } catch (Exception ignored) {}
+
+        return ResponseEntity.ok(Map.of("recommendations", reply));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+    }
+}
+
 }

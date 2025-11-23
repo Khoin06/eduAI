@@ -25,7 +25,10 @@ export class CourseManagementComponent implements OnInit {
   searchTerm = '';
   userId!: number;
   private modalInstance: any;
-
+  chatInput = '';
+recommendedCourses: any[] = [];
+chatOpen = false; 
+isLoading = false; // trạng thái loading
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
@@ -171,4 +174,22 @@ removeFromUser(courseId: number) {
   goToCourseDetail(courseId: number) {
     this.router.navigate(['/course', courseId]);
   }
+  toggleChat() {
+  this.chatOpen = !this.chatOpen;
+}
+  sendAIQuery() {
+  if (!this.chatInput.trim()) return;
+ this.isLoading = true;
+  this.http.post("http://localhost:8080/api/ai/recommend-courses", {
+    message: this.chatInput
+  }).subscribe({
+    next: (res: any) => {
+      const data = JSON.parse(res.recommendations);
+      this.recommendedCourses = data.recommended;
+      this.isLoading = false;
+    },
+    error: (err) => console.error(err)
+  });
+}
+
 }

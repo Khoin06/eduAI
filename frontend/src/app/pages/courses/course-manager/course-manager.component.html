@@ -1,6 +1,54 @@
 <!-- src/app/pages/course-management/course-management.component.html -->
 <div class="p-4">
+
   <h2 class="h4 fw-bold mb-4">Quản lý Khóa học</h2>
+
+<!-- Nút chat bong bóng ở góc -->
+<div class="chat-bubble" (click)="toggleChat()">
+  💬
+</div>
+
+<!-- Popup chat -->
+<div class="chat-popup" [class.show]="chatOpen">
+  <div class="chat-header">
+    💡 Gợi ý khóa học AI
+    <button class="close-btn" (click)="toggleChat()">×</button>
+  </div>
+
+  <div class="chat-body">
+    <input [(ngModel)]="chatInput"
+           type="text"
+           placeholder="Bạn muốn học gì? (Spring Boot, Angular...)"
+           class="chat-input"
+           (keyup.enter)="sendAIQuery()">
+
+    <button class="btn btn-primary btn-sm w-100 mt-2" (click)="sendAIQuery()">Gợi ý</button>
+
+    <!-- Spinner khi loading -->
+    <div *ngIf="isLoading" class="text-center my-2">
+      <div class="spinner-border text-light" role="status" style="width:24px; height:24px;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Kết quả AI -->
+    <div *ngIf="!isLoading">
+      <div *ngIf="recommendedCourses.length > 0" class="mt-3">
+        <div *ngFor="let c of recommendedCourses" class="chat-message">
+          <strong class="text-warning">{{ c.title }}</strong>
+          <p>{{ c.reason }}</p>
+          <button class="btn btn-sm btn-outline-info" [routerLink]="['/course', c.id]">Xem khóa học</button>
+        </div>
+      </div>
+
+      <!-- Thông báo nếu không có kết quả -->
+      <div *ngIf="recommendedCourses.length === 0" class="text-center text-muted mt-3">
+        Không có khóa học phù hợp 😔
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- NÚT THÊM -->
   <button (click)="openAddModal()" class="btn btn-primary mb-3">
@@ -8,7 +56,7 @@
   </button>
 
   <!-- BẢNG KHÓA HỌC -->
-<div class="card shadow-sm border-0 mb-4">
+  <div class="card shadow-sm border-0 mb-4">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0">Khóa học của tôi</h5>
     </div>
@@ -47,13 +95,14 @@
           </tbody>
         </table>
       </div>
+
       <div class="text-center py-5" *ngIf="userCourses.length === 0">
         <p class="text-muted">Chưa có khóa học nào.</p>
       </div>
     </div>
   </div>
 
-<!-- MODAL CHỌN KHÓA HỌC -->
+  <!-- MODAL CHỌN KHÓA HỌC -->
   <div class="modal fade" #addModal tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -61,34 +110,44 @@
           <h5 class="modal-title">Chọn khóa học để thêm</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
           <input type="text" class="form-control mb-3" placeholder="Tìm kiếm..." [(ngModel)]="searchTerm">
-          
+
           <div class="row g-3" style="max-height: 450px; overflow-y: auto;">
             <div class="col-md-6" *ngFor="let course of allCourses | filter:searchTerm:'title'">
               <div class="border p-3 rounded d-flex align-items-center cursor-pointer hover-shadow"
                    [class.bg-light]="selectedCourses.includes(course.id)"
                    (click)="toggleSelect(course.id)">
-                <img [src]="course.imageUrl || '/assets/images/course-default.jpg'" 
-                     class="rounded me-3" width="60" height="60" style="object-fit: cover;">
+
+                <img [src]="course.imageUrl || '/assets/images/course-default.jpg'"
+                     class="rounded me-3"
+                     width="60" height="60"
+                     style="object-fit: cover;">
+
                 <div class="flex-grow-1">
                   <strong>{{ course.title }}</strong>
                   <small class="d-block text-muted">
                     {{ course.instructor || 'Chưa có' }} • {{ course.price | currency:'VND':'symbol':'1.0-0' }}
                   </small>
                 </div>
+
                 <i class="fas fa-check text-success ms-2" *ngIf="selectedCourses.includes(course.id)"></i>
               </div>
             </div>
           </div>
+
         </div>
+
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
           <button class="btn btn-success" (click)="addSelected()" data-bs-dismiss="modal">
             Thêm ({{ selectedCourses.length }})
           </button>
         </div>
+
       </div>
     </div>
   </div>
+
 </div>
