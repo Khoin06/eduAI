@@ -1,21 +1,43 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-progress',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './progress.html',
   styleUrl: './progress.css',
 })
 export class Progress {
-  progress = [
-    { course: 'Angular từ A-Z', lessons: 45, percent: 75 },
-    { course: 'ReactJS Pro', lessons: 38, percent: 45 },
-    { course: 'Node.js & Express', lessons: 60, percent: 90 }
-  ];
 
-  get total() { return this.progress.length; }
-  get completed() { return this.progress.filter(p => p.percent === 100).length; }
-  get totalProgress() {
-    return Math.round(this.progress.reduce((a, b) => a + b.percent, 0) / this.total);
+  progressList: any[] = [];
+  userId!: number;      // userId thật
+  currentUser: any = null;
+
+  constructor(
+    private http: HttpClient,
+    private auth: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.currentUser = this.auth.getCurrentUser();
+
+    if (this.currentUser) {
+      this.userId = this.currentUser.id;   // 👈 GÁN USERID ĐÚNG CHỖ
+      this.loadProgress();
+    }
+  }
+
+  loadProgress() {
+    this.getUserProgress(this.userId).subscribe(data => {
+      this.progressList = data;
+      console.log("Progress:", data);
+    });
+  }
+
+  getUserProgress(userId: number) {
+    return this.http.get<any[]>(`http://localhost:8080/api/user-courses/progress/${userId}`);
   }
 }

@@ -1,0 +1,83 @@
+/* ===== BACKGROUND ===== */
+body, :host {
+  /* background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); */
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ===== CONTAINER ===== */
+.progress-container {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  max-width: 900px;
+  margin: auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* ===== TITLE ===== */
+.progress-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+thead {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+th, td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+tbody tr {
+  background: rgba(255,255,255,0.9);
+  transition: 0.25s;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.7);
+}
+
+tbody tr:hover {
+  background: #e0f7ff;
+  transform: scale(1.01);
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-container {
+  background: #eee;
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 10px;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  border-radius: 6px;
+  transition: width 0.4s ease-in-out;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}

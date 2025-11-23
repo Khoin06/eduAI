@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +76,8 @@ UserCourse uc = userCourseRepository.findByUserIdAndCourseId(userId, courseId)
         userCourseRepository.save(uc);
 System.out.println("Saved user course: " + uc.getProgress());
         return progress;
+    }
+        public List<Map<String, Object>> getProgressByUser(Long userId) {
+        return userCourseRepository.getProgressByUser(userId);
     }
 }

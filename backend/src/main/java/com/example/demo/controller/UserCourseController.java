@@ -16,6 +16,10 @@ public class UserCourseController {
 
     @Autowired
     private UserCourseService userCourseService;
+@GetMapping("/progress/{userId}")
+public ResponseEntity<?> getProgress(@PathVariable Long userId) {
+    return ResponseEntity.ok(userCourseService.getProgressByUser(userId));
+}
 
     @PostMapping("/batch")
     public ResponseEntity<?> addBatch(@RequestBody List<UserCourse> list) {
