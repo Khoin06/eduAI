@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LessonService } from '../../../services/lesson.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-course-detail',
@@ -28,7 +29,8 @@ export class CourseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    private api: LessonService
+    private api: LessonService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -85,6 +87,7 @@ calculateCourseProgress(courseId: number) {
       this.courseProgress = Math.floor((this.passedLessons / this.totalLessons) * 100);
       this.passedMap = {};
       console.log(`✅ 2.Tiến độ khóa học: ${this.passedLessons}/${this.totalLessons} (${this.courseProgress}%)`);
+      this.updateProgress(courseId);
     },
       error: (err) => {
         if (err.status === 403) {
@@ -95,6 +98,10 @@ calculateCourseProgress(courseId: number) {
         this.courseProgress = 0;
       }
   });
+}
+updateProgress(courseId: number) {
+  const url = `http://localhost:8080/api/progress/update/${courseId}/user/${this.userId}`;
+  return this.http.post(url, {});
 }
 
   // Khi người dùng chọn bài học
@@ -148,47 +155,34 @@ calculateCourseProgress(courseId: number) {
     }
     this.router.navigate(['/lesson', lesson.id]);
   }
-  checkUnlockStates() {
-    if (!this.userId) {
-      console.warn('Chưa đăng nhập → không mở bài nào');
-      return;
-    }
+async checkUnlockStates() {
+  if (!this.userId) return;
 
-    // ⭐ LUÔN MỞ BÀI 1
-    this.passedMap = {};
-    if (this.lessons.length > 0) {
-      this.unlockedMap[this.lessons[0].id] = true;
+  this.passedMap = {};
+  this.unlockedMap = {};
 
-      // ⭐ Bước 2: Kiểm tra trực tiếp xem Bài 1 đã PASS chưa ⭐
-    this.api.checkPassed(this.userId, this.lessons[0].id).subscribe({
-      next: (passed: any) => {
-        this.passedMap[this.lessons[0].id] = !!passed; // Gán trạng thái PASS cho Bài 1
-console.log(`PASS STATUS BÀI 1: Lesson ID ${this.lessons[0].id} -> ${!!passed}`);
-      },
-      error: (err) => console.error('Lỗi checkPassed Bài 1:', err),
-    });
-    }
+  for (let i = 0; i < this.lessons.length; i++) {
+    const lessonId = this.lessons[i].id;
+    try {
+      const passed = await this.api.checkPassed(this.userId, lessonId).toPromise();
+      this.passedMap[lessonId] = !!passed;
 
-    console.log('== BẮT ĐẦU CHECK MỞ BÀI ==');
-
-    for (let i = 1; i < this.lessons.length; i++) {
-      const prevLessonId = this.lessons[i - 1].id;
-      const currentLessonId = this.lessons[i].id;
-
-      console.log('Check bài trước:', prevLessonId);
-
-      this.api.checkPassed(this.userId, prevLessonId).subscribe({
-        next: (passed: any) => {
-          console.log(`Bài ${i} unlock?`, passed ? '✔ TRUE' : '❌ FALSE');
-          this.unlockedMap[currentLessonId] = !!passed;
-          this.passedMap[prevLessonId] = !!passed;
-        },
-        error: (err) => {
-          console.error('Lỗi API checkPassed:', err);
-          this.unlockedMap[currentLessonId] = false;
-          this.passedMap[prevLessonId] = false;
-        },
-      });
+      // Bài đầu tiên luôn unlock
+      if (i === 0) {
+        this.unlockedMap[lessonId] = true;
+      } else {
+        const prevLessonId = this.lessons[i - 1].id;
+        this.unlockedMap[lessonId] = !!this.passedMap[prevLessonId];
+      }
+      this.cd.detectChanges();
+      console.log(`Lesson ${i + 1} (ID: ${lessonId}) -> passed: ${passed}, unlocked: ${this.unlockedMap[lessonId]}`);
+    } catch (err) {
+      console.error('Lỗi checkPassed:', err);
+      this.passedMap[lessonId] = false;
+      this.unlockedMap[lessonId] = false;
     }
   }
+}
+
+  
 }
