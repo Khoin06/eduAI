@@ -1,88 +1,112 @@
-/* src/app/shared/header/header.component.css */
-
-/* ========================= */
-/* NAVBAR STYLE PREMIUM      */
-/* ========================= */
-.edu-navbar {
-  background: linear-gradient(135deg, #7e3bd1, #a435f0);
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(8px);
-}
+/* ================================
+   NAVBAR PREMIUM GLASS + NEON
+================================ */
 :host {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* để không bị che */
+  z-index: 1200;
 }
 
-/* LOGO */
+/* NỀN GLASSMORPHISM */
+.edu-navbar {
+  padding: 0.85rem 1.2rem;
+  background: rgba(125, 52, 218, 0.35); /* tím mờ */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+
+  /* Glow nhẹ */
+  box-shadow: 0 4px 25px rgba(122, 39, 245, 0.25),
+              inset 0 0 8px rgba(255, 255, 255, 0.18);
+}
+
+/* ================================
+   LOGO
+================================ */
 .navbar-brand {
-  font-size: 1.4rem;
-  letter-spacing: 0.5px;
+  font-size: 1.5rem;
+  letter-spacing: 0.8px;
   display: flex;
   align-items: center;
+  gap: 8px;
+  color: #fff !important;
+
+  /* Neon glow */
+  text-shadow: 0 0 8px rgba(255,255,255,0.85),
+               0 0 12px rgba(178, 88, 255, 0.9);
 }
 
 .navbar-brand i {
-  font-size: 1.6rem;
-  color: #fff;
+  font-size: 1.7rem;
 }
 
-/* ========================= */
-/* NÚT LOGIN - REGISTER      */
-/* ========================= */
+/* ================================
+   LOGIN / REGISTER
+================================ */
 .login-btn {
   border-radius: 12px !important;
-  border: 2px solid rgba(255,255,255,0.7) !important;
-  padding: 8px 20px !important;
+  border: 2px solid rgba(255,255,255,0.65) !important;
+  padding: 8px 22px !important;
   transition: all 0.3s ease !important;
+  backdrop-filter: blur(5px);
 }
 
 .login-btn:hover {
-  background: rgba(255,255,255,0.25) !important;
-  border-color: #fff !important;
+  background: rgba(255,255,255,0.22) !important;
+  box-shadow: 0 4px 14px rgba(255,255,255,0.25);
 }
 
-/* Nút ĐĂNG KÝ */
 .register-btn {
   background: #fff !important;
   color: #7e3bd1 !important;
   border-radius: 12px !important;
-  padding: 8px 20px !important;
+  padding: 8px 22px !important;
   font-weight: 600 !important;
+  box-shadow: 0 3px 14px rgba(255,255,255,0.25);
   transition: all 0.3s ease !important;
 }
 
 .register-btn:hover {
-  background: #f2e6ff !important;
+  background: #f3e5ff !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,255,255,0.3);
+  box-shadow: 0 8px 18px rgba(165, 90, 255, 0.55);
 }
 
-/* ========================= */
-/* USER AVATAR + DROPDOWN    */
-/* ========================= */
+/* ================================
+   AVATAR + USER
+================================ */
 .user-info {
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
+  color: #fff !important;
 }
 
 .user-info:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* Avatar tròn + viền neon */
+/* Avatar neon ring */
 .avatar-wrapper {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   padding: 2px;
-  background: linear-gradient(135deg, #fff, #d6b3ff);
+
+  background: linear-gradient(135deg, #fff, #c28bff);
+  box-shadow: 0 0 10px rgba(200,150,255,0.45);
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: 0.25s ease;
+}
+
+.user-info:hover .avatar-wrapper {
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(200,150,255,0.75);
 }
 
 .avatar-img {
@@ -92,26 +116,34 @@
   object-fit: cover;
 }
 
-/* Dropdown đẹp hơn */
+/* ================================
+   DROPDOWN MENU
+================================ */
 .dropdown-menu {
-  border-radius: 14px !important;
-  padding: 0.5rem 0;
-  animation: fadeIn 0.15s ease-in-out;
+  border-radius: 14px;
+  padding: 0.6rem 0;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.35);
+
+  /* Glow */
+  box-shadow: 0 8px 22px rgba(90,0,200,0.25);
+
+  animation: fadeIn 0.15s ease-out;
 }
 
 .dropdown-item {
-  padding: 0.6rem 1rem !important;
-  border-radius: 8px;
+  padding: 0.65rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 500;
 }
 
 .dropdown-item:hover {
-  background: rgba(120, 50, 230, 0.1);
+  background: rgba(140, 60, 240, 0.15);
 }
 
-/* ========================= */
-/* ANIMATION                 */
-/* ========================= */
+/* ANIMATION */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
